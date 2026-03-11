@@ -1,97 +1,559 @@
-/* ===== Stat Cards ===== */
-.prog-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+
+:root {
+  --prog-text: #E6EDF3;
+  --prog-text-muted: #9CA3AF;
+  --prog-text-bright: #ffffff;
+
+  --prog-bg-card: #161B22;
+  --prog-bg-tooltip: #0B0F14;
+
+  --prog-teal: #14B8A6;
+  --prog-teal-rgb: 20, 184, 166;
+
+  --prog-amber: #F59E0B;
+  --prog-amber-rgb: 245, 158, 11;
+
+  --prog-easy: #22C55E;
+
+  --prog-hard: #EF4444;
+  --prog-hard-rgb: 239, 68, 68;
+
+  --prog-white-rgb: 255, 255, 255;
 }
 
-.prog-stat-card {
+.progress-page {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 1.2rem 1.5rem;
-  transition: border-color 0.2s;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 2.5rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--prog-text);
 }
 
-.prog-stat-card:hover {
-  border-color: rgba(255,255,255,0.15);
+/* ===== Header ===== */
+.prog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
 }
 
-.prog-stat-icon {
+.prog-title {
   font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--prog-text-bright);
+  margin-bottom: 0.3rem;
 }
 
-.prog-stat-val {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 0.2rem;
-}
-
-.prog-stat-label {
-  font-size: 0.8rem;
-  color: #6b7280;
+.prog-subtitle {
+  font-size: 0.95rem;
+  color: var(--prog-text-muted);
   font-weight: 500;
 }
 
-/* ===== Chart Cards ===== */
-.prog-chart-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+.prog-period-badge {
+  background: rgba(var(--prog-white-rgb), 0.05);
+  border: 1px solid rgba(var(--prog-white-rgb), 0.1);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--prog-text-muted);
+  font-weight: 600;
+}
+
+/* ===== Row 1: 4-Column KPI Grid ===== */
+.prog-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.prog-hero-card {
+  background: var(--prog-bg-card);
+  border: 1px solid rgba(var(--prog-white-rgb), 0.07);
   border-radius: 14px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.prog-hero-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.prog-hero-label {
+  font-size: 0.85rem;
+  color: var(--prog-text-muted);
+  font-weight: 600;
+}
+
+.prog-hero-value {
+  font-size: 2.2rem;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  color: var(--prog-teal);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.prog-hero-trend {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--prog-teal);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+/* ===== Chart Cards (General) ===== */
+.prog-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.prog-row-3 {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.25rem;
+}
+
+.prog-row-3col {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 1.25rem;
+}
+
+.prog-chart-card {
+  background: var(--prog-bg-card);
+  border: 1px solid rgba(var(--prog-white-rgb), 0.07);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.prog-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .prog-chart-title {
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--prog-text);
 }
 
-.prog-row {
+.prog-chart-meta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--prog-text-muted);
+}
+
+.prog-chart-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  border: 1px solid transparent;
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
-.prog-row .prog-chart-card {
-  min-width: 280px;
-  margin-bottom: 0;
-}
-
-/* ===== Custom Tooltip ===== */
+/* ===== Tooltip for Recharts ===== */
 .chart-tooltip {
-  background: #1a1a2e;
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: var(--prog-bg-tooltip);
+  border: 1px solid rgba(var(--prog-white-rgb), 0.1);
   border-radius: 8px;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-family: 'DM Mono', monospace;
 }
 
 .tooltip-label {
-  color: #9ca3af;
-  font-size: 0.8rem;
-  margin: 0 0 0.2rem;
+  color: var(--prog-text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .tooltip-val {
-  color: #a78bfa;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 0.95rem;
-  margin: 0;
 }
 
-/* ===== Category Breakdown ===== */
+/* ===== Row 2: Contribution Heatmap ===== */
+.heatmap-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  justify-content: center;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.heatmap-cell {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: rgba(var(--prog-white-rgb), 0.05);
+  transition: transform 0.1s ease, filter 0.1s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.25);
+  filter: brightness(1.2);
+  z-index: 10;
+}
+
+/* Premium CSS Tooltip */
+.heatmap-cell::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--prog-bg-tooltip);
+  color: var(--prog-text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  border: 1px solid rgba(var(--prog-white-rgb), 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  z-index: 20;
+}
+
+.heatmap-cell:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Heatmap levels */
+.heatmap-cell[data-level="1"] {
+  background-color: rgba(var(--prog-teal-rgb), 0.25);
+}
+
+.heatmap-cell[data-level="2"] {
+  background-color: rgba(var(--prog-teal-rgb), 0.5);
+}
+
+.heatmap-cell[data-level="3"] {
+  background-color: rgba(var(--prog-teal-rgb), 0.75);
+}
+
+.heatmap-cell[data-level="4"] {
+  background-color: var(--prog-teal);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--prog-text-muted);
+  align-self: flex-end;
+}
+
+/* ===== Row 3: Action Center & Weak Topics ===== */
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(var(--prog-white-rgb), 0.02);
+  border: 1px solid rgba(var(--prog-white-rgb), 0.05);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.action-item:hover {
+  background: rgba(var(--prog-white-rgb), 0.05);
+  border-color: rgba(var(--prog-white-rgb), 0.1);
+}
+
+.action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.action-type {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.action-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--prog-text);
+}
+
+.action-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.action-time {
+  font-size: 0.75rem;
+  color: var(--prog-text-muted);
+  font-family: 'DM Mono', monospace;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  display: flex;
+}
+
+.action-item:hover .action-btn {
+  transform: translateX(3px);
+}
+
+.prog-weak-list {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.4rem;
+}
+
+.prog-weak-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px dashed rgba(var(--prog-white-rgb), 0.05);
+}
+
+.prog-weak-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.prog-weak-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.prog-weak-topic {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--prog-text);
+}
+
+.prog-weak-since {
+  font-size: 0.72rem;
+  color: var(--prog-text-muted);
+  font-weight: 500;
+}
+
+.prog-weak-stat {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ===== Row 5: Hard Problem Win Rate ===== */
+.prog-hard-rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.prog-hard-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.prog-hard-details span {
+  font-size: 0.85rem;
+  color: var(--prog-text-muted);
+}
+
+.prog-hard-details b {
+  color: var(--prog-text);
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+}
+
+/* Additional UI Resets for Recharts Radar Polar */
+.recharts-polar-grid-angle line,
+.recharts-polar-grid-concentric polyline {
+  stroke: rgba(var(--prog-white-rgb), 0.08);
+}
+
+/* ===== Restored: Difficulty Rings ===== */
+.prog-difficulty {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 0;
+}
+
+.prog-diff-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-label-inset {
+  position: absolute;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: -0.05em;
+}
+
+.prog-diff-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.prog-diff-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.prog-diff-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--prog-text);
+}
+
+.prog-diff-total {
+  font-size: 0.75rem;
+  color: var(--prog-text-muted);
+  font-weight: 500;
+}
+
+/* ===== Restored: Weekly Goal Tracker (Day Dots) ===== */
+.prog-week-days {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0 1.25rem;
+}
+
+.prog-day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prog-day-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.prog-day-lbl {
+  font-size: 0.65rem;
+  color: var(--prog-text-muted);
+  font-weight: 600;
+}
+
+.prog-day-col.done .prog-day-lbl {
+  color: var(--prog-teal);
+}
+
+.prog-week-bar-bg {
+  height: 6px;
+  background: rgba(var(--prog-white-rgb), 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+}
+
+.prog-week-bar-fill {
+  height: 100%;
+  background: var(--prog-teal);
+  border-radius: 3px;
+  transition: width 0.5s ease-out;
+}
+
+.prog-week-note {
+  font-size: 0.75rem;
+  color: var(--prog-text-muted);
+  text-align: center;
+}
+
+/* ===== Restored: Category Breakdown (Bars) ===== */
 .prog-categories {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  padding-top: 0.25rem;
+  gap: 0.9rem;
+  padding-top: 0.2rem;
 }
 
 .prog-cat-row {
@@ -100,33 +562,38 @@
   gap: 0.75rem;
 }
 
+.prog-cat-rank {
+  font-size: 0.7rem;
+  color: var(--prog-text-muted);
+  font-family: 'DM Mono', monospace;
+  width: 16px;
+}
+
 .prog-cat-name {
-  color: #d1d5db;
-  font-size: 0.88rem;
-  font-weight: 500;
-  width: 64px;
-  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--prog-text);
+  width: 60px;
 }
 
 .prog-cat-bar-bg {
   flex: 1;
-  height: 8px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 4px;
+  height: 6px;
+  background: rgba(var(--prog-white-rgb), 0.05);
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .prog-cat-bar-fill {
   height: 100%;
-  border-radius: 4px;
-  transition: width 0.6s ease;
+  border-radius: 3px;
+  transition: width 0.5s ease-out;
 }
 
 .prog-cat-count {
-  color: #9ca3af;
-  font-size: 0.82rem;
-  font-weight: 600;
-  width: 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--prog-text);
+  width: 20px;
   text-align: right;
-  flex-shrink: 0;
 }
