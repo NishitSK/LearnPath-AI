@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Pages.css';
 import './LearningPlans.css';
 
 const TECH_STACKS = ['React', 'Vue', 'Angular', 'Node.js', 'Express', 'Python', 'Django', 'FastAPI', 'Java', 'Spring Boot', 'Go', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'TypeScript', 'GraphQL', 'REST APIs'];
 
 const GOALS = [
+  { id: 'swe', label: 'SWE', desc: 'Become a strong Software Engineer' },
+  { id: 'sde', label: 'SDE', desc: 'Prepare for Software Development Engineer roles' },
   { id: 'job', label: '🎯 Land a new job', desc: 'Prepare for interviews and job applications' },
   { id: 'promo', label: '🚀 Get promoted', desc: 'Level up your skills for a senior role' },
   { id: 'switch', label: '🔄 Switch domains', desc: 'Transition to a new tech area' },
@@ -19,6 +22,7 @@ const GENERATED_PLAN = [
 ];
 
 export default function LearningPlans() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     role: '',
@@ -40,7 +44,11 @@ export default function LearningPlans() {
 
   const handleGenerate = () => {
     setGenerating(true);
-    setTimeout(() => { setGenerating(false); setGenerated(true); }, 1800);
+    setTimeout(() => {
+      setGenerating(false);
+      setGenerated(true);
+      localStorage.setItem('learning_plan_profile', JSON.stringify(form));
+    }, 1800);
   };
 
   const canNext1 = form.role && form.experience;
@@ -159,7 +167,10 @@ export default function LearningPlans() {
               </div>
             ))}
           </div>
-          <button className="lp-back" style={{ marginTop: '1.5rem' }} onClick={() => { setGenerated(false); setStep(1); }}>← Regenerate Plan</button>
+          <div className="lp-row" style={{ marginTop: '1.5rem' }}>
+            <button className="lp-back" onClick={() => { setGenerated(false); setStep(1); }}>← Regenerate Plan</button>
+            <button className="btn-primary" onClick={() => navigate('/assessments')}>Test Your Skillset</button>
+          </div>
         </div>
       )}
     </div>

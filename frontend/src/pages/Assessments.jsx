@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import './Pages.css';
 import './Assessments.css';
 
 const API_BASE = 'http://localhost:3000';
+const QUIZ_DRAFT_KEY = 'assessments_quiz_draft_v1';
+const CODE_DRAFT_KEY = 'assessments_code_draft_v1';
 
 
-const quizQuestions = [
+const quizQuestionsBank = [
   // JavaScript
   { id:1, category:'JavaScript', difficulty:'Medium',
     question:'What is the output of `typeof null` in JavaScript?',
     options:['null','undefined','object','string'], correct:2,
-    explanation:'`typeof null` returns "object" - a historic JS bug kept for backward compatibility.' },
+    explanation:'`typeof null` returns "object" â€” a historic JS bug kept for backward compatibility.' },
   { id:2, category:'JavaScript', difficulty:'Easy',
     question:'Which method removes the last element from an array and returns it?',
     options:['shift()','pop()','splice()','slice()'], correct:1,
@@ -37,7 +40,7 @@ const quizQuestions = [
   { id:7, category:'Python', difficulty:'Hard',
     question:'What is the output of `[x**2 for x in range(4) if x % 2 == 0]`?',
     options:['[1, 9]','[0, 4]','[0, 1, 4, 9]','[4, 16]'], correct:1,
-    explanation:'Even numbers in range(4) are 0 and 2. 02=0, 22=4 > [0, 4].' },
+    explanation:'Even numbers in range(4) are 0 and 2. 0Â²=0, 2Â²=4 â†’ [0, 4].' },
   // React
   { id:8, category:'React', difficulty:'Easy',
     question:'Which hook performs side effects in a functional component?',
@@ -55,15 +58,15 @@ const quizQuestions = [
   { id:11, category:'DSA', difficulty:'Hard',
     question:'Time complexity of searching in a balanced BST?',
     options:['O(n)','O(log n)','O(n log n)','O(1)'], correct:1,
-    explanation:'Each comparison halves the search space > O(log n).' },
+    explanation:'Each comparison halves the search space â†’ O(log n).' },
   { id:12, category:'DSA', difficulty:'Medium',
     question:'Which data structure uses LIFO order?',
     options:['Queue','Stack','Heap','Graph'], correct:1,
     explanation:'Stack follows Last-In-First-Out.' },
   { id:13, category:'DSA', difficulty:'Medium',
     question:'Worst-case time complexity of QuickSort?',
-    options:['O(n log n)','O(n)','O(n2)','O(log n)'], correct:2,
-    explanation:'QuickSort degrades to O(n2) when the pivot is always the smallest/largest element.' },
+    options:['O(n log n)','O(n)','O(nÂ²)','O(log n)'], correct:2,
+    explanation:'QuickSort degrades to O(nÂ²) when the pivot is always the smallest/largest element.' },
   // SQL
   { id:14, category:'SQL', difficulty:'Easy',
     question:'Which clause filters rows returned by a query?',
@@ -86,7 +89,7 @@ const quizQuestions = [
   { id:18, category:'TypeScript', difficulty:'Medium',
     question:'What is the `any` type in TypeScript?',
     options:['Accepts only numbers','Opts out of type checking','Union of all primitives','Type for arrays'],
-    correct:1, explanation:'`any` disables TypeScript type checking - use sparingly.' },
+    correct:1, explanation:'`any` disables TypeScript type checking â€” use sparingly.' },
   // System Design
   { id:19, category:'System Design', difficulty:'Medium',
     question:'Best database for unstructured data at scale?',
@@ -97,7 +100,64 @@ const quizQuestions = [
     options:['Store databases near the server','Serve static assets from edge servers near users','Encrypt API traffic','Manage DNS records'],
     correct:1, explanation:'CDNs cache and deliver static content from edge nodes close to users, reducing latency.' },
 ];
-/* â”€â”€ Language Options â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+const STACK_TO_QUIZ_CATEGORIES = {
+  react: ['React', 'JavaScript', 'TypeScript', 'CSS'],
+  vue: ['JavaScript', 'TypeScript', 'CSS'],
+  angular: ['JavaScript', 'TypeScript', 'CSS'],
+  'node.js': ['JavaScript', 'SQL', 'System Design'],
+  express: ['JavaScript', 'SQL', 'System Design'],
+  python: ['Python', 'DSA', 'SQL'],
+  django: ['Python', 'SQL', 'System Design'],
+  fastapi: ['Python', 'SQL', 'System Design'],
+  java: ['DSA', 'System Design'],
+  'spring boot': ['SQL', 'System Design'],
+  go: ['System Design', 'DSA'],
+  postgresql: ['SQL'],
+  mongodb: ['SQL', 'System Design'],
+  redis: ['System Design'],
+  docker: ['System Design'],
+  kubernetes: ['System Design'],
+  aws: ['System Design'],
+  typescript: ['TypeScript', 'JavaScript'],
+  graphql: ['System Design'],
+  'rest apis': ['System Design', 'JavaScript'],
+};
+
+function shuffle(items) {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function generateQuizFromStack(stack, bank, targetCount = 10) {
+  if (!Array.isArray(stack) || stack.length === 0) {
+    return shuffle(bank).slice(0, Math.min(targetCount, bank.length));
+  }
+
+  const categorySet = new Set();
+  stack.forEach((tech) => {
+    const normalized = String(tech).toLowerCase();
+    Object.entries(STACK_TO_QUIZ_CATEGORIES).forEach(([key, categories]) => {
+      if (normalized.includes(key)) {
+        categories.forEach((cat) => categorySet.add(cat));
+      }
+    });
+  });
+
+  if (categorySet.size === 0) {
+    return shuffle(bank).slice(0, Math.min(targetCount, bank.length));
+  }
+
+  const priority = shuffle(bank.filter((q) => categorySet.has(q.category)));
+  const fallback = shuffle(bank.filter((q) => !categorySet.has(q.category)));
+  return [...priority, ...fallback].slice(0, Math.min(targetCount, bank.length));
+}
+
+
 const LANGUAGES = [
   { label: 'JavaScript', value: 'javascript', monaco: 'javascript' },
   { label: 'TypeScript', value: 'typescript', monaco: 'typescript' },
@@ -106,7 +166,7 @@ const LANGUAGES = [
   { label: 'C++',        value: 'cpp',         monaco: 'cpp'        },
 ];
 
-/* â”€â”€ 6 Coding Problems â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
 const PROBLEMS = [
   {
     id: 'two-sum', title: 'Two Sum', difficulty: 'Easy', category: 'Arrays & Hashing',
@@ -160,8 +220,8 @@ const PROBLEMS = [
     id: 'climbing-stairs', title: 'Climbing Stairs', difficulty: 'Easy', category: 'Dynamic Programming',
     description: 'You are climbing a staircase that takes n steps to reach the top.\n\nEach time you can climb 1 or 2 steps. In how many distinct ways can you climb to the top?',
     examples: [
-      { input: 'n = 2', output: '2', explanation: '1+1 or 2 - two ways.' },
-      { input: 'n = 3', output: '3', explanation: '1+1+1, 1+2, 2+1 - three ways.' },
+      { input: 'n = 2', output: '2', explanation: '1+1 or 2 â€” two ways.' },
+      { input: 'n = 3', output: '3', explanation: '1+1+1, 1+2, 2+1 â€” three ways.' },
     ],
     constraints: ['1 <= n <= 45'],
     code: {
@@ -210,26 +270,84 @@ const DIFF_COLORS = { Easy: '#22c55e', Medium: '#f59e0b', Hard: '#ef4444' };
 
 export default function Assessments() {
   const { getToken, isSignedIn } = useAuth();
-  const [activeTab, setActiveTab] = useState('quiz');
+  const navigate = useNavigate();
+  const persistedQuizDraft = useMemo(() => {
+    try {
+      const raw = localStorage.getItem(QUIZ_DRAFT_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const persistedCodeDraft = useMemo(() => {
+    try {
+      const raw = localStorage.getItem(CODE_DRAFT_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const [activeTab, setActiveTab] = useState(persistedCodeDraft?.activeTab || 'quiz');
+
+  const selectedTechStack = useMemo(() => {
+    try {
+      const raw = localStorage.getItem('learning_plan_profile');
+      const parsed = raw ? JSON.parse(raw) : null;
+      return Array.isArray(parsed?.stack) ? parsed.stack : [];
+    } catch {
+      return [];
+    }
+  }, []);
+
+  const quizQuestions = useMemo(
+    () => {
+      const fromDraftIds = Array.isArray(persistedQuizDraft?.questionIds)
+        ? persistedQuizDraft.questionIds
+        : [];
+
+      if (fromDraftIds.length > 0) {
+        const byId = new Map(quizQuestionsBank.map((q) => [q.id, q]));
+        const restored = fromDraftIds.map((id) => byId.get(id)).filter(Boolean);
+        if (restored.length > 0) return restored;
+      }
+
+      return generateQuizFromStack(selectedTechStack, quizQuestionsBank, 10);
+    },
+    [selectedTechStack, persistedQuizDraft]
+  );
 
   // Quiz state
-  const [current, setCurrent]   = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [score, setScore]       = useState(0);
-  const [answers, setAnswers]   = useState([]);
-  const [quizDone, setQuizDone] = useState(false);
-  const [quizSaved, setQuizSaved] = useState(false);
+  const [current, setCurrent]   = useState(persistedQuizDraft?.current ?? 0);
+  const [selected, setSelected] = useState(persistedQuizDraft?.selected ?? null);
+  const [submitted, setSubmitted] = useState(persistedQuizDraft?.submitted ?? false);
+  const [score, setScore]       = useState(persistedQuizDraft?.score ?? 0);
+  const [answers, setAnswers]   = useState(Array.isArray(persistedQuizDraft?.answers) ? persistedQuizDraft.answers : []);
+  const [quizDone, setQuizDone] = useState(persistedQuizDraft?.quizDone ?? false);
+  const [quizSaved, setQuizSaved] = useState(persistedQuizDraft?.quizSaved ?? false);
 
   // Code editor state
-  const [language, setLanguage] = useState(LANGUAGES[0]);
-  const [problem, setProblem]   = useState(PROBLEMS[0]);
-  const [code, setCode]         = useState(PROBLEMS[0].code.javascript);
+  const initialLanguage = useMemo(
+    () => LANGUAGES.find((l) => l.value === persistedCodeDraft?.languageValue) || LANGUAGES[0],
+    [persistedCodeDraft]
+  );
+
+  const initialProblem = useMemo(
+    () => PROBLEMS.find((p) => p.id === persistedCodeDraft?.problemId) || PROBLEMS[0],
+    [persistedCodeDraft]
+  );
+
+  const [language, setLanguage] = useState(initialLanguage);
+  const [problem, setProblem]   = useState(initialProblem);
+  const [code, setCode]         = useState(
+    persistedCodeDraft?.code || initialProblem.code[initialLanguage.value]
+  );
   const [output, setOutput]     = useState(null);
   const [running, setRunning]   = useState(false);
   const [submitResult, setSubmitResult] = useState(null);
 
-  const q = quizQuestions[current];
+  const q = quizQuestions[current] || quizQuestions[0];
 
   /* Quiz handlers */
   const handleOptionSelect = (i) => { if (!submitted) setSelected(i); };
@@ -263,6 +381,7 @@ export default function Assessments() {
   const resetQuiz = () => {
     setCurrent(0); setSelected(null); setSubmitted(false);
     setScore(0); setAnswers([]); setQuizDone(false); setQuizSaved(false);
+    localStorage.removeItem(QUIZ_DRAFT_KEY);
   };
 
   /* Code editor handlers */
@@ -283,7 +402,7 @@ export default function Assessments() {
   const handleRun = () => {
     setRunning(true); setSubmitResult(null);
     setTimeout(() => {
-      setOutput('Test case passed\nInput:  ' + problem.examples[0].input + '\nOutput: ' + problem.examples[0].output);
+      setOutput('âœ…  Test case passed\nInput:  ' + problem.examples[0].input + '\nOutput: ' + problem.examples[0].output);
       setRunning(false);
     }, 1200);
   };
@@ -309,6 +428,36 @@ export default function Assessments() {
     } finally { setRunning(false); }
   };
 
+  // Persist quiz draft (attempted question progress) across refresh.
+  useEffect(() => {
+    localStorage.setItem(
+      QUIZ_DRAFT_KEY,
+      JSON.stringify({
+        questionIds: quizQuestions.map((item) => item.id),
+        current,
+        selected,
+        submitted,
+        score,
+        answers,
+        quizDone,
+        quizSaved,
+      })
+    );
+  }, [quizQuestions, current, selected, submitted, score, answers, quizDone, quizSaved]);
+
+  // Persist code editor draft (problem/language/code) across refresh.
+  useEffect(() => {
+    localStorage.setItem(
+      CODE_DRAFT_KEY,
+      JSON.stringify({
+        activeTab,
+        languageValue: language.value,
+        problemId: problem.id,
+        code,
+      })
+    );
+  }, [activeTab, language, problem, code]);
+
   return (
     <div className="page-container">
       <div className="assess-header">
@@ -319,9 +468,15 @@ export default function Assessments() {
         </div>
       </div>
 
-      {/* â”€â”€ Quiz Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      
       {activeTab === 'quiz' && (
         <div className="quiz-wrapper">
+          {selectedTechStack.length > 0 && (
+            <p style={{ color: '#9ca3af', margin: '0 0 0.8rem', fontSize: '0.9rem' }}>
+              Quiz generated from your stack: {selectedTechStack.slice(0, 5).join(', ')}
+              {selectedTechStack.length > 5 ? ` +${selectedTechStack.length - 5}` : ''}
+            </p>
+          )}
           {quizDone ? (
             <div className="quiz-result">
               <div className="result-circle">
@@ -379,7 +534,7 @@ export default function Assessments() {
         </div>
       )}
 
-     
+
       {activeTab === 'code' && (
         <div className="code-layout">
           {/* Problem panel */}
@@ -460,6 +615,12 @@ export default function Assessments() {
           </div>
         </div>
       )}
+
+      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+        <button className="btn-secondary" onClick={() => navigate('/ai-assistant')}>
+          Analyze Your Skillset Level
+        </button>
+      </div>
     </div>
   );
 }
