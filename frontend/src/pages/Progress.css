@@ -20,6 +20,9 @@
   --prog-hard-rgb: 239, 68, 68;
 
   --prog-white-rgb: 255, 255, 255;
+  
+  --card-gradient: linear-gradient(135deg, rgba(20, 184, 166, 0.1) 0%, rgba(99, 102, 241, 0.08) 100%);
+  --card-border: rgba(99, 102, 241, 0.3);
 }
 
 .progress-page {
@@ -65,7 +68,205 @@
   font-weight: 600;
 }
 
-/* ===== Row 1: 4-Column KPI Grid ===== */
+/* ===== KPI Top Row (3 cols) ===== */
+.prog-kpi-top-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== Main Section: Chart (Left) + KPI (Right) ===== */
+.prog-main-section {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.prog-area-chart-card {
+  grid-column: 1;
+}
+
+.prog-kpi-sidebar {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ===== Avatar Card Styling ===== */
+.prog-avatar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: auto;
+  padding: 1.5rem 1.25rem;
+}
+
+.prog-area-chart-full {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.prog-progress-ring-card {
+  background: linear-gradient(135deg, var(--prog-bg-card) 0%, rgba(99, 102, 241, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08);
+  position: relative;
+}
+
+.prog-avatar-ring-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prog-avatar-circle {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 184, 166, 0.1);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
+  z-index: 2;
+}
+
+.prog-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prog-ring-overlay {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* ===== Stats Row Below Avatar ===== */
+.prog-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.prog-stat-item {
+  background: rgba(20, 184, 166, 0.08);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  border-radius: 10px;
+  padding: 0.75rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.prog-stat-label {
+  font-size: 0.65rem;
+  color: var(--prog-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prog-stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--prog-teal);
+  font-family: 'DM Mono', monospace;
+  line-height: 1;
+}
+
+.prog-stat-meta {
+  font-size: 0.6rem;
+  color: var(--prog-text-muted);
+  font-weight: 500;
+}
+
+/* ===== Bottom Section: 3-Column Cards ===== */
+.prog-bottom-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+/* ===== Featured Quiz Card ===== */
+.prog-quiz-card {
+  background: linear-gradient(135deg, #FF1744 0%, #FF6B6B 100%) !important;
+  border: 1px solid rgba(255, 23, 68, 0.5) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px;
+}
+
+.prog-quiz-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.prog-quiz-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.prog-quiz-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3;
+}
+
+.prog-quiz-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+}
+
+.prog-score-value {
+  font-size: 2.8rem;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: rgba(255, 255, 255, 1);
+}
+
+.prog-score-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== KPI Grid (4 cols) ===== */
 .prog-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -73,14 +274,14 @@
 }
 
 .prog-hero-card {
-  background: var(--prog-bg-card);
-  border: 1px solid rgba(var(--prog-white-rgb), 0.07);
+  background: linear-gradient(135deg, var(--prog-bg-card) 0%, rgba(20, 184, 166, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 14px;
   padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(20, 184, 166, 0.08);
 }
 
 .prog-hero-icon-wrap {
@@ -139,12 +340,13 @@
 }
 
 .prog-chart-card {
-  background: var(--prog-bg-card);
-  border: 1px solid rgba(var(--prog-white-rgb), 0.07);
+  background: linear-gradient(135deg, var(--prog-bg-card) 0%, rgba(99, 102, 241, 0.08) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 14px;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08);
 }
 
 .prog-chart-header {
@@ -596,4 +798,129 @@
   color: var(--prog-text);
   width: 20px;
   text-align: right;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1100px) {
+  .prog-kpi-top-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .prog-main-section {
+    grid-template-columns: 1fr;
+  }
+
+  .prog-area-chart-card {
+    grid-column: 1;
+  }
+
+  .prog-kpi-sidebar {
+    grid-column: 1;
+    flex-direction: row;
+  }
+
+  .prog-bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .progress-page {
+    padding: 1.5rem 1.25rem;
+    gap: 1rem;
+  }
+
+  .prog-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .prog-title {
+    font-size: 1.4rem;
+  }
+
+  .prog-kpi-top-row {
+    grid-template-columns: 1fr;
+  }
+
+  .prog-main-section {
+    grid-template-columns: 1fr;
+  }
+
+  .prog-kpi-sidebar {
+    flex-direction: column;
+  }
+
+  .prog-bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Light Theme Support ===== */
+.theme-light {
+  --prog-text: #2d2418;
+  --prog-text-muted: #6b6b6b;
+  --prog-text-bright: #1a1a1a;
+  --prog-bg-card: #f5f1ed;
+  --prog-bg-tooltip: #fffbf8;
+}
+
+.theme-light .prog-chart-card,
+.theme-light .prog-hero-card {
+  background: linear-gradient(135deg, var(--prog-bg-card) 0%, rgba(245, 158, 11, 0.06) 100%) !important;
+  border-color: rgba(20, 184, 166, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.06) !important;
+}
+
+.theme-light .prog-progress-ring-card {
+  background: linear-gradient(135deg, var(--prog-bg-card) 0%, rgba(99, 102, 241, 0.06) 100%) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.06) !important;
+}
+
+.theme-light .prog-title {
+  color: #1a1a1a;
+}
+
+.theme-light .prog-subtitle {
+  color: #7b7b7b;
+}
+
+.theme-light .prog-chart-title {
+  color: #2d2418;
+}
+
+.theme-light .prog-period-badge {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #6b6b6b;
+}
+
+.theme-light .chart-tooltip {
+  background: var(--prog-bg-tooltip);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .tooltip-label {
+  color: var(--prog-text);
+}
+
+.theme-light .prog-hero-value {
+  color: #14B8A6;
+}
+
+.theme-light .prog-quiz-card {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8A8A 100%) !important;
+  border-color: rgba(255, 107, 107, 0.5) !important;
+}
+
+.theme-light .prog-avatar-circle {
+  border-color: rgba(20, 184, 166, 0.4);
+  background: rgba(20, 184, 166, 0.08);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
+}
+
+.theme-light .prog-stat-item {
+  background: rgba(20, 184, 166, 0.06);
+  border-color: rgba(20, 184, 166, 0.15);
 }

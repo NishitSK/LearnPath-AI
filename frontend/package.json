@@ -14,6 +14,7 @@
     "@clerk/react": "^6.1.0",
     "@clerk/themes": "^2.4.55",
     "@monaco-editor/react": "^4.7.0",
+    "monaco-editor": "^0.52.2",
     "@react-oauth/google": "^0.13.4",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",

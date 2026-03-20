@@ -82,6 +82,15 @@
   font-size: 0.85rem;
 }
 
+.theme-light .quiz-cat {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #4f46e5 !important;
+}
+
+.theme-light .quiz-counter {
+  color: #6b7280 !important;
+}
+
 .quiz-card {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.08);
@@ -95,6 +104,15 @@
   font-weight: 600;
   line-height: 1.6;
   margin: 0 0 1.5rem;
+}
+
+.theme-light .quiz-card {
+  background: #ffffff !important;
+  border: 1px solid #d4cdc7 !important;
+}
+
+.theme-light .quiz-question {
+  color: #1a1511 !important;
 }
 
 .quiz-options {
@@ -126,9 +144,9 @@
 }
 
 .quiz-option.selected {
-  border-color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.12);
-  color: white;
+  background: rgba(139, 92, 246, 0.16) !important;
+  color: white !important;
+  font-weight: 500;
 }
 
 .quiz-option.correct {
@@ -141,6 +159,43 @@
   border-color: #ef4444;
   background: rgba(239, 68, 68, 0.1);
   color: #f87171;
+}
+
+/* ===== Light Theme Quiz Options ===== */
+.theme-light .quiz-option {
+  background: #f0f0f0 !important;
+  border: 2px solid #d4cdc7 !important;
+  color: #2d2418 !important;
+}
+
+.theme-light .quiz-option:hover:not(:disabled) {
+  border-color: #6366f1 !important;
+  background: #e8e4df !important;
+}
+
+.theme-light .quiz-option.selected {
+  background: #e8e0d8 !important;
+  color: #1a1511 !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 0 0 2px #6366f1 !important;
+}
+
+.theme-light .quiz-option.correct {
+  border-color: #16a34a !important;
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.theme-light .quiz-option.wrong {
+  border-color: #dc2626 !important;
+  background: #fee2e2 !important;
+  color: #7f1d1d !important;
+}
+
+.theme-light .opt-letter {
+  background: rgba(99, 102, 241, 0.15) !important;
+  color: #4f46e5 !important;
+  font-weight: 700 !important;
 }
 
 .opt-letter {
@@ -175,6 +230,25 @@
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.25);
   color: #fca5a5;
+}
+
+.theme-light .quiz-explanation {
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.theme-light .exp-correct {
+  background: #d1fae5 !important;
+  border: 1px solid #6ee7b7 !important;
+  color: #065f46 !important;
+}
+
+.theme-light .exp-wrong {
+  background: #fee2e2 !important;
+  border: 1px solid #fca5a5 !important;
+  color: #7f1d1d !important;
 }
 
 .quiz-actions {
@@ -435,7 +509,26 @@
   background: #1e1e1e;
   border-top: 1px solid rgba(255,255,255,0.06);
   padding: 1rem;
-  min-height: 80px;
+  max-height: 300px;
+  overflow-y: auto;
+  min-height: 120px;
+}
+
+.code-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.code-output::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-output::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.code-output::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .output-pre {
@@ -474,4 +567,177 @@
 
 .sr-stats strong {
   color: white;
+}
+
+/* ===== New Test Result UI ===== */
+.test-result {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.test-result.run-result {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.result-status {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4ade80;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.test-result.run-result .result-status {
+  color: #6366f1;
+}
+
+.result-runtime {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.test-case-badges {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.test-case-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4ade80;
+}
+
+.test-case-badge.passed .badge-checkmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #4ade80;
+  color: #000;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.test-case-detail {
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.detail-section {
+  margin-bottom: 1rem;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-content {
+  font-family: 'DM Mono', 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: #e5e7eb;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+/* ===== Light Theme Test Result ===== */
+.theme-light .test-result {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.theme-light .test-result.run-result {
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.theme-light .result-header {
+  border-bottom-color: rgba(45, 36, 24, 0.1) !important;
+}
+
+.theme-light .result-status {
+  color: #16a34a !important;
+}
+
+.theme-light .test-result.run-result .result-status {
+  color: #4f46e5 !important;
+}
+
+.theme-light .result-runtime {
+  color: #666 !important;
+}
+
+.theme-light .test-case-badge {
+  background: rgba(34, 197, 94, 0.15) !important;
+  border-color: rgba(34, 197, 94, 0.4) !important;
+  color: #16a34a !important;
+}
+
+.theme-light .test-case-badge.passed .badge-checkmark {
+  background: #16a34a !important;
+  color: white !important;
+}
+
+.theme-light .test-case-detail {
+  background: rgba(45, 36, 24, 0.05) !important;
+}
+
+.theme-light .detail-label {
+  color: #666 !important;
+}
+
+.theme-light .detail-content {
+  color: #1a1511 !important;
+}
+
+.theme-light .code-output {
+  background: #f5f1ed !important;
+  border-top-color: #d4cdc7 !important;
+}
+
+.theme-light .code-output::-webkit-scrollbar-track {
+  background: rgba(45, 36, 24, 0.05);
+}
+
+.theme-light .code-output::-webkit-scrollbar-thumb {
+  background: rgba(45, 36, 24, 0.2);
+}
+
+.theme-light .code-output::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 36, 24, 0.3);
 }

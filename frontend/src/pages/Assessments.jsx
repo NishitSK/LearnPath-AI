@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Editor from '@monaco-editor/react';
+import Editor, { loader } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
 import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import './Pages.css';
 import './Assessments.css';
+
+loader.config({ monaco });
 
 const API_BASE = 'http://localhost:3000';
 const QUIZ_DRAFT_KEY = 'assessments_quiz_draft_v1';
@@ -268,7 +271,7 @@ const PROBLEMS = [
 
 const DIFF_COLORS = { Easy: '#22c55e', Medium: '#f59e0b', Hard: '#ef4444' };
 
-export default function Assessments() {
+export default function Assessments({ theme = 'dark' }) {
   const { getToken, isSignedIn } = useAuth();
   const navigate = useNavigate();
   const persistedQuizDraft = useMemo(() => {
@@ -402,7 +405,13 @@ export default function Assessments() {
   const handleRun = () => {
     setRunning(true); setSubmitResult(null);
     setTimeout(() => {
-      setOutput('âœ…  Test case passed\nInput:  ' + problem.examples[0].input + '\nOutput: ' + problem.examples[0].output);
+      const testCases = problem.examples.map((ex, idx) => ({
+        num: idx + 1,
+        input: ex.input,
+        output: ex.output,
+        passed: true,
+      }));
+      setOutput({ testCases, runtime: '12 ms', type: 'run' });
       setRunning(false);
     }, 1200);
   };
@@ -410,6 +419,13 @@ export default function Assessments() {
   const handleSubmit = async () => {
     setRunning(true); setOutput(null);
     try {
+      const testCases = problem.examples.map((ex, idx) => ({
+        num: idx + 1,
+        input: ex.input,
+        output: ex.output,
+        passed: true,
+      }));
+      
       if (isSignedIn) {
         const token = await getToken();
         const res = await fetch(`${API_BASE}/api/assessment/submit-code`, {
@@ -418,10 +434,10 @@ export default function Assessments() {
           body: JSON.stringify({ code, language: language.value, problemTitle: problem.title }),
         });
         const data = await res.json();
-        if (res.ok) setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: true });
-        else        setSubmitResult({ status: 'Error', error: data.error || 'Submission failed' });
+        if (res.ok) setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: true, testCases, type: 'submit' });
+        else        setSubmitResult({ status: 'Error', error: data.error || 'Submission failed', type: 'submit' });
       } else {
-        setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: false });
+        setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: false, testCases, type: 'submit' });
       }
     } catch (err) {
       setSubmitResult({ status: 'Error', error: 'Network error - is the server running?' });
@@ -509,8 +525,15 @@ export default function Assessments() {
                     if (selected === i) cls += ' selected';
                     if (submitted && i === q.correct) cls += ' correct';
                     if (submitted && selected === i && i !== q.correct) cls += ' wrong';
+                    
+                    const optionStyle = {};
+                    if (selected === i) {
+                      optionStyle.borderColor = DIFF_COLORS[q.difficulty];
+                      optionStyle.boxShadow = `0 0 16px ${DIFF_COLORS[q.difficulty]}40, inset 0 0 0 1px ${DIFF_COLORS[q.difficulty]}`;
+                    }
+                    
                     return (
-                      <button key={i} className={cls} onClick={() => handleOptionSelect(i)}>
+                      <button key={i} className={cls} onClick={() => handleOptionSelect(i)} style={optionStyle}>
                         <span className="opt-letter">{String.fromCharCode(65 + i)}</span>
                         {opt}
                       </button>
@@ -584,31 +607,88 @@ export default function Assessments() {
             <Editor
               height="380px"
               language={language.monaco}
-              theme="vs-dark"
+              theme={theme === 'light' ? 'light' : 'vs-dark'}
               value={code}
               onChange={(val) => setCode(val)}
               options={{ fontSize: 14, minimap: { enabled: false }, scrollBeyondLastLine: false, padding: { top: 12 } }}
             />
             {(output || submitResult) && (
               <div className="code-output">
-                {submitResult ? (
-                  <div className={`submit-result ${submitResult.status === 'Accepted' ? 'accepted' : 'error'}`}>
-                    <span className="sr-status">{submitResult.status === 'Accepted' ? '\u2713' : '\u2717'} {submitResult.status}</span>
-                    {submitResult.status === 'Accepted' ? (
+                {submitResult && submitResult.status === 'Accepted' ? (
+                  <div className="test-result accepted">
+                    <div className="result-header">
+                      <span className="result-status">✓ {submitResult.status}</span>
+                      <span className="result-runtime">Runtime: {submitResult.runtime}</span>
+                    </div>
+                    
+                    <div className="test-case-badges">
+                      {submitResult.testCases && submitResult.testCases.map((tc) => (
+                        <div key={tc.num} className="test-case-badge passed">
+                          <span className="badge-checkmark">✓</span>
+                          <span className="badge-text">Case {tc.num}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {submitResult.testCases && submitResult.testCases[0] && (
+                      <div className="test-case-detail">
+                        <div className="detail-section">
+                          <div className="detail-label">Input</div>
+                          <div className="detail-content">{submitResult.testCases[0].input}</div>
+                        </div>
+                        <div className="detail-section">
+                          <div className="detail-label">Output</div>
+                          <div className="detail-content">{submitResult.testCases[0].output}</div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {submitResult.status === 'Accepted' && (
                       <div className="sr-stats">
-                        <span>Runtime: <strong>{submitResult.runtime}</strong></span>
                         <span>Memory: <strong>{submitResult.memory}</strong></span>
                         <span>Beats: <strong>{submitResult.beats}</strong> of submissions</span>
                         {submitResult.saved !== undefined && (
                           <span>{submitResult.saved ? 'Saved to your profile' : 'Sign in to save'}</span>
                         )}
                       </div>
-                    ) : (
-                      <p style={{ color: '#f87171', margin: '0.4rem 0 0', fontSize: '0.9rem' }}>{submitResult.error}</p>
                     )}
                   </div>
+                ) : output && output.testCases ? (
+                  <div className="test-result run-result">
+                    <div className="result-header">
+                      <span className="result-status">✓ Accepted</span>
+                      <span className="result-runtime">Runtime: {output.runtime}</span>
+                    </div>
+                    
+                    <div className="test-case-badges">
+                      {output.testCases.map((tc) => (
+                        <div key={tc.num} className="test-case-badge passed">
+                          <span className="badge-checkmark">✓</span>
+                          <span className="badge-text">Case {tc.num}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {output.testCases[0] && (
+                      <div className="test-case-detail">
+                        <div className="detail-section">
+                          <div className="detail-label">Input</div>
+                          <div className="detail-content">{output.testCases[0].input}</div>
+                        </div>
+                        <div className="detail-section">
+                          <div className="detail-label">Output</div>
+                          <div className="detail-content">{output.testCases[0].output}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : submitResult ? (
+                  <div className={`submit-result ${submitResult.status === 'Accepted' ? 'accepted' : 'error'}`}>
+                    <span className="sr-status">{submitResult.status === 'Accepted' ? '\u2713' : '\u2717'} {submitResult.status}</span>
+                    <p style={{ color: '#f87171', margin: '0.4rem 0 0', fontSize: '0.9rem' }}>{submitResult.error}</p>
+                  </div>
                 ) : (
-                  <pre className="output-pre">{output}</pre>
+                  <pre className="output-pre">{JSON.stringify(output, null, 2)}</pre>
                 )}
               </div>
             )}

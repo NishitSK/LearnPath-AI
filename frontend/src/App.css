@@ -1,27 +1,27 @@
 .app-container {
-  background-color: #050508;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a0a2e 25%, #16213e 50%, #0f3460 75%, #050508 100%);
+  background-attachment: fixed;
   min-height: 100vh;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .theme-dark {
-  background-color: #050508;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a0a2e 25%, #16213e 50%, #0f3460 75%, #050508 100%);
   color: #ffffff;
 }
 
 .theme-light {
-  background-color: #f8fafc;
+  background: linear-gradient(135deg, #faf8f6 0%, #f5f1ed 50%, #efefea 100%);
   color: #0f172a;
 }
 
-.theme-light,
 .theme-light.app-container {
-  background-color: #ffffff !important;
-  color: #000000 !important;
+  background: linear-gradient(135deg, #faf8f6 0%, #f5f1ed 50%, #efefea 100%) !important;
+  color: #2d2418 !important;
 }
 
-.theme-light * {
-  color: #000000 !important;
+.theme-light :is(p, span, h1, h2, h3, h4, h5, h6, li, a, label) {
+  color: #2d2418 !important;
 }
 
 .theme-light :is(div, section, article, aside, main, header, footer, nav, form) {
@@ -57,57 +57,111 @@
   .heatmap-card,
   .action-card
 ) {
-  background: rgba(248, 251, 255, 0.92) !important;
-  border-color: #d1d5db !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f7f5f1 100%) !important;
+  border: 1px solid rgba(212, 205, 199, 0.5) !important;
+  border-color: #d4cdc7 !important;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.04) !important;
 }
 
-.theme-light :is(input, textarea, select, button, code, pre) {
-  background: #f9fbff !important;
-  color: #000000 !important;
-  border-color: #d1d5db !important;
+.theme-light :is(input, textarea, select, code, pre) {
+  background: #fffaf7 !important;
+  color: #2d2418 !important;
+  border-color: #d4cdc7 !important;
+}
+
+.theme-light button:not([class*="btn-primary"]):not([class*="btn-submit"]):not([class*="btn-run"]):not([class*="btn-secondary"]) {
+  background: #fffaf7 !important;
+  color: #2d2418 !important;
+  border-color: #d4cdc7 !important;
 }
 
 .theme-light :is(
-  .btn-signin,
-  .theme-toggle,
-  .page-content,
-  .lp-input,
-  .lp-tag,
-  .lp-goal,
-  .quiz-card,
   .prob-select,
   .lang-select,
-  .editor-topbar,
-  .prog-period-badge,
-  .prog-chart-badge,
-  .action-item,
-  .heatmap-cell,
-  .quiz-progress-bar,
-  .prob-example,
-  .prob-constraints li
+  .lp-input
 ) {
-  border-color: #9ca3af !important;
+  border-color: #d4cdc7 !important;
+}
+
+.theme-light :is(.prob-diff, .prob-cat, .quiz-diff, .quiz-cat) {
+  color: inherit !important;
+}
+
+.theme-light :is(.btn-primary, .btn-submit, .btn-run, .btn-secondary) {
+  color: white !important;
+  border-color: transparent !important;
 }
 
 .theme-light .brand-gradient {
-  background: none !important;
-  -webkit-text-fill-color: #000000 !important;
-  color: #000000 !important;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d8b4fe 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 700 !important;
 }
 
 .theme-light .page-title {
-  background: none !important;
-  -webkit-text-fill-color: #000000 !important;
-  color: #000000 !important;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d8b4fe 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 700 !important;
 }
 
-.theme-dark.home-dotted {
-  background-image: radial-gradient(#1f2937 1px, transparent 1px);
+/* Light theme: make badges and colored elements visible */
+.theme-light .quiz-cat,
+.theme-light .prob-cat {
+  background: rgba(99, 102, 241, 0.08) !important;
+  color: #4f46e5 !important;
+}
+
+.theme-light .lp-tag,
+.theme-light .lp-goal {
+  background: rgba(20, 184, 166, 0.1) !important;
+  color: #0d9488 !important;
+}
+
+.theme-light .quiz-card,
+.theme-light .code-layout,
+.theme-light .code-problem {
+  background: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+
+.theme-light a {
+  color: #0891b2 !important;
+  font-weight: 500;
+}
+
+.theme-light a:hover {
+  color: #0d9488 !important;
+  opacity: 0.9;
+}
+
+.theme-dark :is(.page-container, .quiz-card, .code-layout, .prob-example, .quiz-wrapper) {
+  background: rgba(15, 23, 42, 0.4) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1) !important;
+}
+
+.theme-dark .quiz-card,
+.theme-dark .code-editor-panel {
+  background: rgba(20, 29, 59, 0.6) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+
+.theme-light.home-dotted {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1.15px, transparent 1.15px);
   background-size: 30px 30px;
 }
 
-.theme-light.home-dotted {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.32) 1.15px, transparent 1.15px);
+.theme-dark.home-dotted {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 

@@ -164,271 +164,134 @@ export default function Progress() {
     <div className="page-container progress-page">
       <div className="prog-header">
         <div>
-          <h1 className="prog-title">Growth Analytics</h1>
-          <p className="prog-subtitle">Comprehensive performance & velocity tracking</p>
+          <h1 className="prog-title">Track Your Progress</h1>
+          <p className="prog-subtitle">Showing Daily Rank/Score for last 30 days</p>
         </div>
-        <div className="prog-period-badge">Last 90 days</div>
+        <div className="prog-period-badge">Last 30 days</div>
       </div>
 
-      {/* ── Row 1: KPI Grid (4 cols, NEW STYLE) ── */}
-      <div className="prog-kpi-grid">
+      {/* ── KPI Top Row: Rank + Score + Avatar ── */}
+      <div className="prog-kpi-top-row">
         <div className="prog-hero-card">
-          <div className="prog-hero-icon-wrap" style={{ background: C.tealLight, borderColor: 'rgba(20,184,166,0.3)' }}>{Icon.check()}</div>
-          <div className="prog-hero-label">Total Problems</div>
-          <div className="prog-hero-value">{categoryData.reduce((s, c) => s + c.solved, 0)}</div>
-          <div className="prog-hero-trend">{Icon.trendingUp()} <span>+12 this week</span></div>
-        </div>
-
-        <div className="prog-hero-card">
-          <div className="prog-hero-icon-wrap" style={{ background: C.amberLight, borderColor: 'rgba(245,158,11,0.3)' }}>{Icon.flame()}</div>
-          <div className="prog-hero-label">Consistency Score</div>
-          <div className="prog-hero-value" style={{ color: C.amber }}>8.4<span style={{ fontSize: '1.2rem', color: C.muted }}>/10</span></div>
-          <div className="prog-hero-trend" style={{ color: C.amber }}>Current Streak: 7 Days</div>
+          <div className="prog-hero-icon-wrap" style={{ background: 'rgba(99, 102, 241, 0.15)', border: `1px solid #6366f1` }}>
+            {Icon.trophy(C.amber)}
+          </div>
+          <p className="prog-hero-label">Overall Rank</p>
+          <span className="prog-hero-value">1,698</span>
         </div>
 
         <div className="prog-hero-card">
-          <div className="prog-hero-icon-wrap" style={{ background: C.tealLight, borderColor: 'rgba(20,184,166,0.3)' }}>{Icon.zap()}</div>
-          <div className="prog-hero-label">Learning Velocity</div>
-          <div className="prog-hero-value">1.8x</div>
-          <div className="prog-hero-trend">Faster improvement vs last mo.</div>
+          <div className="prog-hero-icon-wrap" style={{ background: 'rgba(20, 184, 166, 0.15)', border: `1px solid ${C.teal}` }}>
+            {Icon.check(C.teal)}
+          </div>
+          <p className="prog-hero-label">Overall Score</p>
+          <span className="prog-hero-value">1,280</span>
         </div>
 
-        <div className="prog-hero-card">
-          <div className="prog-hero-icon-wrap" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }}>{Icon.clock()}</div>
-          <div className="prog-hero-label">Avg Solve Time</div>
-          <div className="prog-hero-value" style={{ color: C.text }}>14<span style={{ fontSize: '1.4rem' }}>m</span></div>
-          <div className="prog-hero-trend" style={{ color: C.muted }}>1.2 attempts per problem</div>
-        </div>
-      </div>
-
-      {/* ── Row 2: Difficulty Rings & Weekly Goal & Needs Attention (OLD BEST) ── */}
-      <div className="prog-row-3col">
-        {/* Difficulty Breakdown */}
-        <div className="prog-chart-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Difficulty Breakdown</h3>
-            <span className="prog-chart-meta">Total solved</span>
-          </div>
-          <div className="prog-difficulty">
-            {difficultyData.map((d) => {
-              const pct = Math.round((d.solved / d.total) * 100);
-              return (
-                <div key={d.label} className="prog-diff-item">
-                  <Ring pct={pct} color={d.color} size={64} stroke={5} label={`${pct}%`} />
-                  <div className="prog-diff-info">
-                    <span className="prog-diff-label" style={{ color: d.color }}>{d.label}</span>
-                    <span className="prog-diff-val">{d.solved}<span className="prog-diff-total">/{d.total}</span></span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Weekly Goal Tracker */}
-        <div className="prog-chart-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Weekly Goal</h3>
-            <span className="prog-chart-badge" style={{ color: C.teal, borderColor: 'rgba(20,184,166,0.3)' }}>
-              {Icon.goal()} &nbsp;{weekDone}/{weekGoal} days
-            </span>
-          </div>
-          <div className="prog-week-days">
-            {weekDays.map((day, i) => {
-              const done = i < weekDone;
-              const today = i === weekDone;
-              return (
-                <div key={day} className={`prog-day-col ${done ? 'done' : ''} ${today ? 'today' : ''}`}>
-                  <div className="prog-day-dot" style={{
-                    background: done ? C.teal : 'rgba(255,255,255,0.05)',
-                    boxShadow: done ? `0 0 10px rgba(20,184,166,0.3)` : 'none'
-                  }} />
-                  <span className="prog-day-lbl">{day}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="prog-week-bar-bg">
-            <div className="prog-week-bar-fill" style={{ width: `${(weekDone / weekGoal) * 100}%` }} />
-          </div>
-          <p className="prog-week-note">
-            {weekGoal - weekDone > 0
-              ? `${weekGoal - weekDone} more ${weekGoal - weekDone === 1 ? 'day' : 'days'} to hit your weekly goal`
-              : `Weekly goal complete!`}
-          </p>
-        </div>
-
-        {/* Weak Topics (Text Only - Fixed Layout) */}
-        <div className="prog-chart-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Needs Attention</h3>
-            <span className="prog-chart-badge" style={{ color: C.hard, borderColor: 'rgba(239,68,68,0.25)' }}>
-              {Icon.alert(C.hard)} &nbsp;Weak areas
-            </span>
-          </div>
-          <div className="prog-weak-list">
-            {weakTopics.map(t => (
-              <div key={t.topic} className="prog-weak-row">
-                <div className="prog-weak-info">
-                  <span className="prog-weak-topic">{t.topic}</span>
-                  <span className="prog-weak-since">Last practiced {t.lastSeen}</span>
-                </div>
-                <span className="prog-weak-stat" style={{ color: t.pct < 25 ? C.hard : C.medium }}>{t.pct}% mastery</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Row 3: Practice Consistency & Topic Mastery Profile (NEW HYBRID) ── */}
-      <div className="prog-row-3">
-        {/* Heatmap */}
-        <div className="prog-chart-card heatmap-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Practice Consistency</h3>
-            <span className="prog-chart-meta">396 contributions in the last 6 months</span>
-          </div>
-          <div className="heatmap-container">
-            <div className="heatmap-grid" style={{ overflowX: 'hidden' }}>
-              {heatmapWeeks.map((week, wIdx) => (
-                <div key={wIdx} className="heatmap-col">
-                  {week.map((day, dIdx) => (
-                    <div
-                      key={dIdx}
-                      className="heatmap-cell"
-                      data-level={day.level}
-                      data-tooltip={`${day.count} problem${day.count !== 1 ? 's' : ''} solved on ${day.dateStr}`}
-                    />
-                  ))}
-                </div>
-              ))}
+        <div className="prog-progress-ring-card prog-avatar-card">
+          <div className="prog-avatar-ring-wrapper">
+            <div className="prog-avatar-circle">
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" 
+                alt="User Avatar" 
+                className="prog-avatar-img"
+              />
             </div>
-            <div className="heatmap-legend">
-              <span>Less</span>
-              <div className="heatmap-cell" data-level="0" />
-              <div className="heatmap-cell" data-level="1" />
-              <div className="heatmap-cell" data-level="2" />
-              <div className="heatmap-cell" data-level="3" />
-              <div className="heatmap-cell" data-level="4" />
-              <span>More</span>
+            <div className="prog-ring-overlay">
+              <Ring pct={4.8} color={C.teal} size={120} stroke={8} label="4.8%" />
+            </div>
+          </div>
+
+          {/* Stats Below Avatar */}
+          <div className="prog-stats-row">
+            <div className="prog-stat-item">
+              <span className="prog-stat-label">Lectures Progress</span>
+              <span className="prog-stat-value">29</span>
+              <span className="prog-stat-meta">/ 598 Completed</span>
+            </div>
+            <div className="prog-stat-item">
+              <span className="prog-stat-label">Coding Problems</span>
+              <span className="prog-stat-value">28</span>
+              <span className="prog-stat-meta">/ 381 Solved</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Radar Chart */}
+      {/* ── Area Chart: Full Width ── */}
+      <div className="prog-chart-card prog-area-chart-full">
+        <div className="prog-chart-header">
+          <h3 className="prog-chart-title">Questions Solved Over Time</h3>
+          <span className="prog-chart-badge" style={{ color: C.teal, borderColor: 'rgba(20,184,166,0.3)' }}>
+            {Icon.trendingUp()} &nbsp;Upward trend
+          </span>
+        </div>
+        <ResponsiveContainer width="100%" height={280}>
+          <AreaChart data={solvedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+            <defs>
+              <linearGradient id="solvedGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={C.teal} stopOpacity={0.2} />
+                <stop offset="95%" stopColor={C.teal} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+            <XAxis dataKey="day" tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+            <Area type="monotone" dataKey="solved" stroke={C.teal} strokeWidth={2}
+              fill="url(#solvedGrad)" dot={{ fill: C.teal, r: 3 }} activeDot={{ r: 5 }} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* ── Bottom Section: 3-Column Cards ── */}
+      <div className="prog-bottom-section">
+        {/* Card 1: Daily Coding Questions */}
         <div className="prog-chart-card">
           <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Topic Mastery Profile</h3>
-            <span className="prog-chart-badge" style={{ color: C.amber, borderColor: 'rgba(245,158,11,0.3)' }}>
-              Biggest Jump: Strings (+12%)
-            </span>
+            <h3 className="prog-chart-title">Daily Coding Questions Solved</h3>
+            <span className="prog-chart-meta">Past 7 days</span>
           </div>
-          <ResponsiveContainer width="100%" height={250}>
-            <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData} margin={{ top: 10, bottom: 10 }}>
-              <PolarGrid stroke="rgba(255,255,255,0.08)" />
-              <PolarAngleAxis dataKey="subject" tick={{ fill: C.muted, fontSize: 11 }} />
-              <Radar name="Mastery" dataKey="A" stroke={C.teal} fill={C.teal} fillOpacity={0.3} dot={{ r: 3, fill: C.teal }} />
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={weeklyStreak}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+              <XAxis dataKey="week" tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
-            </RadarChart>
+              <Bar dataKey="streak" fill={C.teal} radius={[8, 8, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
 
-      {/* ── Row 4: Timeline Charts (Area + Stacked Area) (MIX) ── */}
-      <div className="prog-row-2">
+        {/* Card 2: Daily In-Video MCQs */}
         <div className="prog-chart-card">
           <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Questions Solved Over Time</h3>
-            <span className="prog-chart-badge" style={{ color: C.teal, borderColor: 'rgba(20,184,166,0.3)' }}>
-              {Icon.trendingUp()} &nbsp;Upward trend
-            </span>
+            <h3 className="prog-chart-title">Daily In-Video MCQs Solved</h3>
+            <span className="prog-chart-meta">Past 7 days</span>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={solvedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="solvedGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={C.teal} stopOpacity={0.2} />
-                  <stop offset="95%" stopColor={C.teal} stopOpacity={0} />
-                </linearGradient>
-              </defs>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={weeklyStreak}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="day" tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="week" tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-              <Area type="monotone" dataKey="solved" stroke={C.teal} strokeWidth={2}
-                fill="url(#solvedGrad)" dot={{ fill: C.teal, r: 3 }} activeDot={{ r: 5 }} />
-            </AreaChart>
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="streak" fill={C.amber} radius={[8, 8, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="prog-chart-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Difficulty Progression</h3>
-            <span className="prog-chart-meta">Questions solved by type</span>
+        {/* Card 3: Recent Quiz Solved */}
+        <div className="prog-chart-card prog-quiz-card">
+          <div className="prog-quiz-header">
+            <span className="prog-quiz-category">RED</span>
+            <h3 className="prog-quiz-title">RED Quiz - Programming in C++</h3>
           </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={solvedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="day" tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: C.muted, fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-              <Area type="monotone" dataKey="hard" stackId="1" stroke={C.hard} fill={C.hard} fillOpacity={0.6} />
-              <Area type="monotone" dataKey="medium" stackId="1" stroke={C.medium} fill={C.medium} fillOpacity={0.6} />
-              <Area type="monotone" dataKey="easy" stackId="1" stroke={C.easy} fill={C.easy} fillOpacity={0.6} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* ── Row 5: Categories & Actions (2 cols) ── */}
-      <div className="prog-row-2">
-        <div className="prog-chart-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Category Breakdown</h3>
-            <span className="prog-chart-meta">Total solved by topic</span>
-          </div>
-          <div className="prog-categories">
-            {categoryData.map((cat, i) => (
-              <div key={cat.name} className="prog-cat-row">
-                <span className="prog-cat-rank">#{i + 1}</span>
-                <span className="prog-cat-name">{cat.name}</span>
-                <div className="prog-cat-bar-bg">
-                  <div className="prog-cat-bar-fill" style={{
-                    width: `${cat.pct}%`,
-                    background: i % 2 === 0 ? C.teal : 'rgba(20,184,166,0.5)',
-                  }} />
-                </div>
-                <span className="prog-cat-count">{cat.solved}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="prog-chart-card action-card">
-          <div className="prog-chart-header">
-            <h3 className="prog-chart-title">Recommended Next Steps</h3>
-            <span className="prog-chart-meta">Curated for your progression</span>
-          </div>
-          <div className="action-list">
-            {recommendedDocs.map((doc, i) => (
-              <div key={i} className="action-item">
-                <div className="action-info">
-                  <div className="action-type" style={{
-                    color: doc.type === 'Video' ? C.amber : C.teal,
-                    background: doc.type === 'Video' ? C.amberLight : C.tealLight
-                  }}>{doc.type}</div>
-                  <span className="action-title">{doc.title}</span>
-                </div>
-                <div className="action-right">
-                  <span className="action-time">{doc.time}</span>
-                  <button className="action-btn">{Icon.arrowRight()}</button>
-                </div>
-              </div>
-            ))}
+          <div className="prog-quiz-score">
+            <span className="prog-score-value">130</span>
+            <span className="prog-score-label">Score</span>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

@@ -33,15 +33,17 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('learnpath-theme', theme)
+    document.body.classList.remove('theme-dark', 'theme-light')
+    document.body.classList.add(`theme-${theme}`)
   }, [theme])
 
   return (
     <Router>
-      <div className="app-container">
-        <Navbar />
+      <div className={`app-container theme-${theme}`}>
+        <Navbar theme={theme} onToggleTheme={handleThemeToggle} />
         <Routes>
           <Route path="/" element={<HomeRedirect />} />
-          <Route path="/assessments" element={<ProtectedRoute><Assessments /></ProtectedRoute>} />
+          <Route path="/assessments" element={<ProtectedRoute><Assessments theme={theme} /></ProtectedRoute>} />
           <Route path="/learning-plans" element={<ProtectedRoute><LearningPlans /></ProtectedRoute>} />
           <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
           <Route path="/ai-assistant" element={<ProtectedRoute><AiAssistant /></ProtectedRoute>} />
