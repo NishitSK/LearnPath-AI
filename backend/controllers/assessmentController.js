@@ -183,3 +183,82 @@ export const getSubmissions = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Get Dashboard (aggregated progress data for charts)
+export const getDashboard = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+
+    // Fetch all submissions for this user
+    const submissions = await Submission.find({ userId }).sort({ createdAt: 1 });
+
+    // Fetch progress summary
+    const progress = await Progress.findOne({ userId });
+
+    // --- Helper: format a date as "MMM D" (e.g. "Mar 27") ---
+    const fmtDate = (d) => {
+      const dt = new Date(d);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[dt.getMonth()]} ${dt.getDate()}`;
+    };
+
+    // --- 1. Main chart: daily score (cumulative solved count per day) ---
+    const dailyScoreMap = {};
+    let cumulativeScore = 0;
+    for (const sub of submissions) {
+      const key = fmtDate(sub.createdAt);
+      cumulativeScore += (sub.score || 1);
+      dailyScoreMap[key] = cumulativeScore;
+    }
+    const mainChartData = Object.entries(dailyScoreMap).map(([date, score]) => ({ date, score }));
+
+    // --- 2. Daily coding questions solved ---
+    const codingMap = {};
+    for (const sub of submissions) {
+      if (sub.submissionType === 'coding') {
+        const key = fmtDate(sub.createdAt);
+        codingMap[key] = (codingMap[key] || 0) + 1;
+      }
+    }
+    const codingQuestionsData = Object.entries(codingMap).map(([day, solved]) => ({ day, solved }));
+
+    // --- 3. Daily MCQ / quiz questions solved ---
+    const mcqMap = {};
+    for (const sub of submissions) {
+      if (sub.submissionType === 'quiz' || sub.assessmentId) {
+        const key = fmtDate(sub.createdAt);
+        mcqMap[key] = (mcqMap[key] || 0) + 1;
+      }
+    }
+    const mcqData = Object.entries(mcqMap).map(([day, solved]) => ({ day, solved }));
+
+    // --- 4. Recent quiz scores ---
+    const quizSubs = submissions.filter(s => s.submissionType === 'quiz' || s.assessmentId);
+    const quizData = quizSubs.slice(-7).map((s, i) => ({
+      name: `Quiz ${i + 1}`,
+      score: s.score || 0,
+    }));
+
+    // --- 5. Summary stats ---
+    const totalSolved = progress?.totalSolved || submissions.length;
+    const dailyStreak = progress?.dailyStreak || 0;
+    const totalCoding = submissions.filter(s => s.submissionType === 'coding').length;
+    const totalQuiz = submissions.filter(s => s.submissionType === 'quiz' || s.assessmentId).length;
+
+    res.json({
+      mainChartData,
+      codingQuestionsData,
+      mcqData,
+      quizData,
+      stats: {
+        totalSolved,
+        dailyStreak,
+        totalCoding,
+        totalQuiz,
+      },
+    });
+  } catch (error) {
+    console.error("getDashboard error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
