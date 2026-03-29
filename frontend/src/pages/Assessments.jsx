@@ -347,8 +347,9 @@ export default function Assessments({ theme = 'dark' }) {
     persistedCodeDraft?.code || initialProblem.code[initialLanguage.value]
   );
   const [output, setOutput]     = useState(null);
-  const [running, setRunning]   = useState(false);
+  const [executingAction, setExecutingAction] = useState(null); // 'run', 'submit', or null
   const [submitResult, setSubmitResult] = useState(null);
+  const isProcessingRef = React.useRef(false);
 
   const q = quizQuestions[current] || quizQuestions[0];
 
@@ -402,46 +403,56 @@ export default function Assessments({ theme = 'dark' }) {
     setOutput(null); setSubmitResult(null);
   };
 
-  const handleRun = () => {
-    setRunning(true); setSubmitResult(null);
-    setTimeout(() => {
-      const testCases = problem.examples.map((ex, idx) => ({
-        num: idx + 1,
-        input: ex.input,
-        output: ex.output,
-        passed: true,
-      }));
-      setOutput({ testCases, runtime: '12 ms', type: 'run' });
-      setRunning(false);
-    }, 1200);
-  };
+  const handleCodeAction = async (type, e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (isProcessingRef.current || executingAction) return;
 
-  const handleSubmit = async () => {
-    setRunning(true); setOutput(null);
-    try {
-      const testCases = problem.examples.map((ex, idx) => ({
-        num: idx + 1,
-        input: ex.input,
-        output: ex.output,
-        passed: true,
-      }));
-      
-      if (isSignedIn) {
-        const token = await getToken();
-        const res = await fetch(`${API_BASE}/api/assessment/submit-code`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ code, language: language.value, problemTitle: problem.title }),
-        });
-        const data = await res.json();
-        if (res.ok) setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: true, testCases, type: 'submit' });
-        else        setSubmitResult({ status: 'Error', error: data.error || 'Submission failed', type: 'submit' });
-      } else {
-        setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: false, testCases, type: 'submit' });
+    isProcessingRef.current = true;
+    setExecutingAction(type);
+    setSubmitResult(null);
+    setOutput(null);
+    
+    if (type === 'run') {
+      setTimeout(() => {
+        const runCases = problem.examples.map((ex, idx) => ({
+          num: idx + 1,
+          input: ex.input,
+          output: ex.output,
+          passed: true,
+        }));
+        setOutput({ testCases: runCases, runtime: '12 ms', type: 'run' });
+        setExecutingAction(null);
+        isProcessingRef.current = false;
+      }, 1200);
+    } else if (type === 'submit') {
+      try {
+        const submitCases = problem.examples.map((ex, idx) => ({
+          num: idx + 1,
+          input: ex.input,
+          output: ex.output,
+          passed: true,
+        }));
+        
+        if (isSignedIn) {
+          const token = await getToken();
+          const res = await fetch(`${API_BASE}/api/assessment/submit-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ code, language: language.value, problemTitle: problem.title }),
+          });
+          const data = await res.json();
+          if (res.ok) setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: true, testCases: submitCases, type: 'submit' });
+          else        setSubmitResult({ status: 'Error', error: data.error || 'Submission failed', type: 'submit' });
+        } else {
+          setSubmitResult({ status: 'Accepted', runtime: '68 ms', memory: '42.3 MB', beats: '87%', saved: false, testCases: submitCases, type: 'submit' });
+        }
+      } catch (err) {
+        setSubmitResult({ status: 'Error', error: 'Network error' });
+      } finally { 
+        setExecutingAction(null); 
+        isProcessingRef.current = false;
       }
-    } catch (err) {
-      setSubmitResult({ status: 'Error', error: 'Network error - is the server running?' });
-    } finally { setRunning(false); }
+    }
   };
 
   // Persist quiz draft (attempted question progress) across refresh.
@@ -596,11 +607,23 @@ export default function Assessments({ theme = 'dark' }) {
                 {LANGUAGES.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
               </select>
               <div className="editor-btns">
-                <button className="btn-run" onClick={handleRun} disabled={running}>
-                  {running ? 'Running...' : 'Run'}
+                <button
+                  key="code-run-btn"
+                  type="button"
+                  className="btn-run"
+                  onClick={(e) => handleCodeAction('run', e)}
+                  disabled={executingAction === 'run'}
+                >
+                  {executingAction === 'run' ? 'Running...' : 'Run'}
                 </button>
-                <button className="btn-submit" onClick={handleSubmit} disabled={running}>
-                  {running ? 'Submitting...' : 'Submit'}
+                <button
+                  key="code-submit-btn"
+                  type="button"
+                  className="btn-submit"
+                  onClick={(e) => handleCodeAction('submit', e)}
+                  disabled={executingAction === 'submit'}
+                >
+                  {executingAction === 'submit' ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </div>
@@ -656,7 +679,7 @@ export default function Assessments({ theme = 'dark' }) {
                 ) : output && output.testCases ? (
                   <div className="test-result run-result">
                     <div className="result-header">
-                      <span className="result-status">✓ Accepted</span>
+                      <span className="result-status">✓ Passed</span>
                       <span className="result-runtime">Runtime: {output.runtime}</span>
                     </div>
                     

@@ -10,10 +10,6 @@ import Progress from './pages/Progress'
 import AiAssistant from './pages/AiAssistant'
 import './App.css';
 
-function HomeRedirect() {
-  const { isSignedIn } = useUser();
-  return isSignedIn ? <Navigate to="/learning-plans" replace /> : <Home />;
-}
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
@@ -45,7 +41,7 @@ function App() {
         <div className="bg-beam bg-beam-3"></div>
         <Navbar theme={theme} onToggleTheme={handleThemeToggle} />
         <Routes>
-          <Route path="/" element={<HomeRedirect />} />
+          <Route path="/" element={<Home />} />
           <Route path="/assessments" element={<ProtectedRoute><Assessments theme={theme} /></ProtectedRoute>} />
           <Route path="/learning-plans" element={<ProtectedRoute><LearningPlans /></ProtectedRoute>} />
           <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />

@@ -2,10 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import OpenAI from "openai";
-import { AgentOrchestrator } from "./agents/agentOrchestrator.js";
 import { clerkMiddleware } from "./middleware/clerkMiddleware.js";
 import assessmentRoutes from "./routes/assessmentRoutes.js";
+import { client, agentOrchestrator } from "./config/aiClient.js";
 
 dotenv.config();
 
@@ -16,15 +15,6 @@ app.use(clerkMiddleware());
 
 // Assessment Routes
 app.use("/api/assessment", assessmentRoutes);
-
-// OpenAI Client Setup
-const client = new OpenAI({
-  baseURL: "https://router.huggingface.co/v1",
-  apiKey: process.env.HF_API_KEY,
-});
-
-// AI Agent System Setup
-const agentOrchestrator = new AgentOrchestrator(client);
 
 // Root Endpoint
 app.get('/', (req, res) => {

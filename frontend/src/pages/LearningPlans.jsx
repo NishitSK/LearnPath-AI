@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
 import './Pages.css';
 import './LearningPlans.css';
+
+const API_BASE = 'http://localhost:3000';
 
 const TECH_STACKS = ['React', 'Vue', 'Angular', 'Node.js', 'Express', 'Python', 'Django', 'FastAPI', 'Java', 'Spring Boot', 'Go', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'TypeScript', 'GraphQL', 'REST APIs'];
 
@@ -23,6 +26,7 @@ const GENERATED_PLAN = [
 
 export default function LearningPlans() {
   const navigate = useNavigate();
+  const { getToken, isSignedIn } = useAuth();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     role: '',
@@ -35,6 +39,34 @@ export default function LearningPlans() {
   const [generated, setGenerated] = useState(false);
   const [generating, setGenerating] = useState(false);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!isSignedIn) return;
+      try {
+        const token = await getToken();
+        const res = await fetch(`${API_BASE}/api/assessment/user-profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok && data) {
+          setForm(data);
+          setGenerated(true);
+          localStorage.setItem('learning_plan_profile', JSON.stringify(data));
+        } else {
+          // Check local storage if DB fetch fails or no profile
+          const raw = localStorage.getItem('learning_plan_profile');
+          if (raw) {
+            setForm(JSON.parse(raw));
+            setGenerated(true);
+          }
+        }
+      } catch (err) {
+        console.error("Fetch profile failed:", err);
+      }
+    };
+    fetchProfile();
+  }, [isSignedIn, getToken]);
+
   const toggleStack = (tech) => {
     setForm(f => ({
       ...f,
@@ -42,13 +74,32 @@ export default function LearningPlans() {
     }));
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setGenerating(true);
-    setTimeout(() => {
-      setGenerating(false);
+    try {
+      if (isSignedIn) {
+        const token = await getToken();
+        await fetch(`${API_BASE}/api/assessment/user-profile`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(form)
+        });
+      }
+      
+      // Delay for effect
+      await new Promise(r => setTimeout(r, 1500));
       setGenerated(true);
       localStorage.setItem('learning_plan_profile', JSON.stringify(form));
-    }, 1800);
+    } catch (err) {
+      console.error("Failed to save profile:", err);
+      // Fallback to local storage only if network fails
+      setGenerated(true);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const canNext1 = form.role && form.experience;

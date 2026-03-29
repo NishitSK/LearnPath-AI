@@ -7,7 +7,11 @@ import {
   submitCode,
   submitQuiz,
   getSubmissions,
-  getDashboard
+  getDashboard,
+  updateUserProfile,
+  getUserProfile,
+  getAiAnalysis,
+  aiChat
 } from "../controllers/assessmentController.js";
 
 const router = express.Router();
@@ -19,5 +23,9 @@ router.post("/submit-code", requireAuth, submitCode);
 router.post("/submit-quiz", requireAuth, submitQuiz);
 router.get("/submissions", requireAuth, getSubmissions);
 router.get("/dashboard", requireAuth, getDashboard);
+router.post("/user-profile", requireAuth, updateUserProfile);
+router.get("/user-profile", requireAuth, getUserProfile);
+router.get("/ai-analysis", requireAuth, getAiAnalysis);
+router.post("/ai-chat", requireAuth, aiChat);
 
 export default router;

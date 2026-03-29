@@ -463,9 +463,15 @@
   font-weight: 600;
 }
 
+.editor-left-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .editor-btns {
   display: flex;
-  gap: 0.6rem;
+  gap: 2.5rem;
 }
 
 .btn-run {
@@ -503,6 +509,8 @@
 .btn-run:disabled, .btn-submit:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
+  user-select: none;
 }
 
 .code-output {

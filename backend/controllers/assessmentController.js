@@ -1,6 +1,8 @@
 import Assessment from "../models/Assessment.js";
 import Submission from "../models/Submission.js";
 import Progress from "../models/Progress.js";
+import UserProfile from "../models/UserProfile.js";
+import { agentOrchestrator } from "../config/aiClient.js";
 
 // Get Assessment
 export const getAssessment = async (req, res) => {
@@ -259,6 +261,93 @@ export const getDashboard = async (req, res) => {
     });
   } catch (error) {
     console.error("getDashboard error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Update User Profile
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+    const profileData = req.body;
+
+    const profile = await UserProfile.findOneAndUpdate(
+      { userId },
+      { ...profileData, userId },
+      { new: true, upsert: true }
+    );
+
+    res.json({ message: "Profile updated successfully", profile });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get User Profile
+export const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+    const profile = await UserProfile.findOne({ userId });
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get AI Analysis
+export const getAiAnalysis = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+
+    // Fetch user profile, submissions and progress
+    const profile = await UserProfile.findOne({ userId });
+    if (!profile) {
+      return res.status(404).json({ error: "Please complete your learning plan profile first." });
+    }
+
+    const submissions = await Submission.find({ userId }).sort({ createdAt: -1 }).limit(15);
+    const progress = await Progress.findOne({ userId });
+
+    // Use plain objects to avoid Mongoose overhead in orchestrator
+    const submissionsJSON = submissions.map(s => s.toJSON());
+    const profileJSON = profile.toJSON();
+
+    const result = await agentOrchestrator.generateAnalysis(profileJSON, submissionsJSON, progress);
+
+    if (!result.success) {
+      console.error("AI Analysis Failed:", result.error, result.details);
+      return res.status(500).json({ error: result.error, details: result.details });
+    }
+
+    res.json(result.analysis);
+  } catch (error) {
+    console.error("getAiAnalysis technical error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// AI Chat
+export const aiChat = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+    const { messages } = req.body;
+
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: "Messages array is required." });
+    }
+
+    const profile = await UserProfile.findOne({ userId });
+    const submissions = await Submission.find({ userId }).sort({ createdAt: -1 }).limit(10);
+
+    const result = await agentOrchestrator.handleChat(messages, profile || {}, submissions || []);
+
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
+    }
+
+    res.json({ response: result.response });
+  } catch (error) {
+    console.error("aiChat error:", error);
     res.status(500).json({ error: error.message });
   }
 };
