@@ -31,7 +31,6 @@ services:
     name: learnpath-frontend
     runtime: static
     plan: free
-    region: ohio
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     rootDir: frontend
