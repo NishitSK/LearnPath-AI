@@ -509,15 +509,15 @@ export default function Assessments({ theme = 'dark' }) {
             </div>
           ) : (
             <>
-              <div className="quiz-progress-bar">
-                <div className="quiz-progress-fill" style={{ width: `${(current / quizQuestions.length) * 100}%` }} />
-              </div>
-              <div className="quiz-meta">
-                <span className="quiz-cat">{q.category}</span>
-                <span className="quiz-diff" style={{ color: DIFF_COLORS[q.difficulty] }}>{q.difficulty}</span>
-                <span className="quiz-counter">{current + 1} / {quizQuestions.length}</span>
-              </div>
               <div className="quiz-card">
+                <div className="quiz-progress-bar">
+                  <div className="quiz-progress-fill" style={{ width: `${(current / quizQuestions.length) * 100}%` }} />
+                </div>
+                <div className="quiz-meta">
+                  <span className="quiz-cat">{q.category}</span>
+                  <span className="quiz-diff" style={{ color: DIFF_COLORS[q.difficulty] }}>{q.difficulty}</span>
+                  <span className="quiz-counter">{current + 1} / {quizQuestions.length}</span>
+                </div>
                 <p className="quiz-question">{q.question}</p>
                 <div className="quiz-options">
                   {q.options.map((opt, i) => {
@@ -696,7 +696,7 @@ export default function Assessments({ theme = 'dark' }) {
         </div>
       )}
 
-      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: '3rem', marginBottom: '4rem', display: 'flex', justifyContent: 'center' }}>
         <button className="btn-secondary" onClick={() => navigate('/ai-assistant')}>
           Analyze Your Skillset Level
         </button>

@@ -20,30 +20,11 @@
   z-index: 2100;
 }
 
-.navbar-floating-pill {
-  position: fixed;
-  top: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  height: 60px;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 1rem;
-  
-  /* Premium Glass Capsule Styling */
-  background: rgba(10, 10, 15, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    
-  z-index: 2050;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.4s ease;
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .logo-icon { width: 32px; height: 32px; }

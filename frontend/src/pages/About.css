@@ -1,0 +1,149 @@
+/* ══════════════════════════════════════════════
+   ABOUT PAGE — EDITORIAL LAYOUT
+   ══════════════════════════════════════════════ */
+
+.about-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Hero Block ── */
+.about-hero {
+  padding: 2.5rem !important;
+  margin-bottom: 1px;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.about-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.about-kicker::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--amber);
+}
+
+.about-hero h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.about-summary {
+  font-size: 1rem;
+  color: var(--ink-muted) !important;
+  line-height: 1.75;
+  max-width: 60ch;
+  margin: 0 !important;
+}
+
+/* ── Feature Grid ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.about-card,
+.about-glass-card {
+  padding: 2rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--radius) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.about-card:hover,
+.about-glass-card:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15) !important;
+}
+
+.about-card:hover::before { transform: scaleX(1); }
+
+.about-card h3 {
+  font-family: var(--font-display) !important;
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  color: var(--ink) !important;
+  margin: 0 0 0.6rem !important;
+}
+
+.about-card p {
+  font-size: 0.9rem !important;
+  color: var(--ink-muted) !important;
+  line-height: 1.65 !important;
+  margin: 0 !important;
+}
+
+/* ── Mission Block ── */
+.about-mission {
+  padding: 2rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--radius) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-mission h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.about-mission p {
+  color: var(--ink-muted) !important;
+  line-height: 1.75;
+  font-size: 1rem;
+  margin: 0 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 980px) {
+  .about-grid { grid-template-columns: 1fr; }
+}

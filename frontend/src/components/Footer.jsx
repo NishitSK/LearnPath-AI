@@ -1,56 +1,49 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className="main-footer">
-      <div className="footer-container">
-        <div className="footer-top">
-          <div className="footer-brand">
-            <span className="footer-logo">LearnPath AI</span>
-            <p>Empowering the next generation of engineers with personalized, scroll-driven learning.</p>
-          </div>
-          
-          <div className="footer-links">
-            <div className="footer-column">
-              <h4>Product</h4>
-              <a href="/">Features</a>
-              <a href="/">Integrations</a>
-              <a href="/">Reviews</a>
-            </div>
-            
-            <div className="footer-column">
-              <h4>Company</h4>
-              <a href="/">About Us</a>
-              <a href="/">Careers</a>
-              <a href="/">Policy</a>
-            </div>
-            
-            <div className="footer-column">
-              <h4>Social</h4>
-              <a href="https://twitter.com">Twitter</a>
-              <a href="https://github.com">GitHub</a>
-              <a href="https://linkedin.com">LinkedIn</a>
-            </div>
+    <footer className="site-footer">
+      <div className="footer-content">
+        <div className="footer-brand">
+          <img src="/logo.png" alt="LearnPath AI" />
+          <div>
+            <h4>LearnPath AI</h4>
+            <p>Adaptive roadmaps for focused developer growth. Crafting the next generation of engineers with AI-driven, highly personalized, and brutalist-flavored learning journeys.</p>
           </div>
         </div>
-        
-        <div className="footer-bottom">
-          <div className="footer-copyright">
-            © 2026 LearnPath AI. All rights reserved. Built with ❤️ for future engineers.
+
+        <div className="footer-links-group">
+          <div className="footer-column">
+            <h5>Platform</h5>
+            <Link to="/">Home</Link>
+            <Link to="/learning-plans">Pathways</Link>
+            <Link to="/assessments">Assessments</Link>
+            <Link to="/progress">Progress</Link>
           </div>
-          <div className="footer-social-meta">
-             <div className="solar-system">
-               <div className="central-dot"></div>
-               <div className="orbit orbit--1"><div className="orbiting-dot"></div></div>
-               <div className="orbit orbit--2"><div className="orbiting-dot"></div></div>
-             </div>
-             <span className="status">Status: All Systems Operational</span>
+          
+          <div className="footer-column">
+            <h5>Company</h5>
+            <Link to="/about">About Us</Link>
+            <a href="#careers">Careers</a>
+            <a href="#blog">Blog</a>
+            <a href="#contact">Contact</a>
+          </div>
+
+          <div className="footer-column">
+            <h5>Legal</h5>
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Service</a>
+            <a href="#cookies">Cookies</a>
           </div>
         </div>
       </div>
+
+      <div className="footer-bottom">
+        <p className="footer-copy">© {new Date().getFullYear()} LearnPath AI.</p>
+        <p className="footer-tagline">Built for intentional learning. Open Source & Proud.</p>
+      </div>
     </footer>
   );
-};
-
-export default Footer;
+}

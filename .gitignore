@@ -34,3 +34,8 @@ Thumbs.db
 # Package manager locks (keep only one)
 yarn.lock
 skills/
+
+# Backups and temporary files
+.bak/
+*.bak
+status.txt

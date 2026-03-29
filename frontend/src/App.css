@@ -10,135 +10,7 @@
   color: #ffffff;
 }
 
-.theme-light {
-  background: linear-gradient(135deg, #faf8f6 0%, #f5f1ed 50%, #efefea 100%);
-  color: #0f172a;
-}
 
-.theme-light.app-container {
-  background: linear-gradient(135deg, #faf8f6 0%, #f5f1ed 50%, #efefea 100%) !important;
-  color: #2d2418 !important;
-}
-
-.theme-light :is(p, span, h1, h2, h3, h4, h5, h6, li, a, label) {
-  color: #2d2418 !important;
-}
-
-.theme-light :is(div, section, article, aside, main, header, footer, nav, form) {
-  background-image: none !important;
-}
-
-.theme-light :is(
-  .page-container,
-  .home-page,
-  .hero,
-  .hero-content,
-  .hero-visual,
-  .visual-card,
-  .page-content,
-  .lp-form-wrapper,
-  .lp-card,
-  .lp-result,
-  .lp-roadmap,
-  .lp-phase,
-  .assess-header,
-  .quiz-wrapper,
-  .quiz-card,
-  .code-layout,
-  .code-problem,
-  .code-editor-panel,
-  .prog-header,
-  .prog-kpi-grid,
-  .prog-hero-card,
-  .prog-chart-card,
-  .prog-row-3col,
-  .prog-row-3,
-  .prog-row-2,
-  .heatmap-card,
-  .action-card
-) {
-  background: linear-gradient(135deg, #ffffff 0%, #f7f5f1 100%) !important;
-  border: 1px solid rgba(212, 205, 199, 0.5) !important;
-  border-color: #d4cdc7 !important;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.04) !important;
-}
-
-.theme-light :is(input, textarea, select, code, pre) {
-  background: #fffaf7 !important;
-  color: #2d2418 !important;
-  border-color: #d4cdc7 !important;
-}
-
-.theme-light button:not([class*="btn-primary"]):not([class*="btn-submit"]):not([class*="btn-run"]):not([class*="btn-secondary"]) {
-  background: #fffaf7 !important;
-  color: #2d2418 !important;
-  border-color: #d4cdc7 !important;
-}
-
-.theme-light :is(
-  .prob-select,
-  .lang-select,
-  .lp-input
-) {
-  border-color: #d4cdc7 !important;
-}
-
-.theme-light :is(.prob-diff, .prob-cat, .quiz-diff, .quiz-cat) {
-  color: inherit !important;
-}
-
-.theme-light :is(.btn-primary, .btn-submit, .btn-run, .btn-secondary) {
-  color: white !important;
-  border-color: transparent !important;
-}
-
-.theme-light .brand-gradient {
-  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d8b4fe 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  color: transparent !important;
-  font-weight: 700 !important;
-}
-
-.theme-light .page-title {
-  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #d8b4fe 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
-  color: transparent !important;
-  font-weight: 700 !important;
-}
-
-/* Light theme: make badges and colored elements visible */
-.theme-light .quiz-cat,
-.theme-light .prob-cat {
-  background: rgba(99, 102, 241, 0.08) !important;
-  color: #4f46e5 !important;
-}
-
-.theme-light .lp-tag,
-.theme-light .lp-goal {
-  background: rgba(20, 184, 166, 0.1) !important;
-  color: #0d9488 !important;
-}
-
-.theme-light .quiz-card,
-.theme-light .code-layout,
-.theme-light .code-problem {
-  background: #ffffff !important;
-  border-color: #e5e7eb !important;
-}
-
-.theme-light a {
-  color: #0891b2 !important;
-  font-weight: 500;
-}
-
-.theme-light a:hover {
-  color: #0d9488 !important;
-  opacity: 0.9;
-}
 
 .theme-dark :is(.page-container, .quiz-card, .code-layout, .prob-example, .quiz-wrapper) {
   background: rgba(15, 23, 42, 0.4) !important;
@@ -156,13 +28,11 @@
 
 
 .theme-light.home-dotted {
-  background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1.15px, transparent 1.15px);
-  background-size: 30px 30px;
+  background-image: none;
 }
 
 .theme-dark.home-dotted {
-  background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1px, transparent 1px);
-  background-size: 30px 30px;
+  background-image: none;
 }
 
 .brand-gradient {
@@ -171,4 +41,39 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+/* ── Blur the whole container when loading ── */
+.app-container.is-loading {
+  filter: blur(6px) brightness(0.92);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Route loader overlay — semi-transparent tint over blurred container ── */
+.route-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: oklch(97% 0.008 80 / 0.35);
+  pointer-events: all;
+  animation: overlayIn 0.2s ease forwards;
+}
+
+body.theme-dark .route-loader-overlay {
+  background: oklch(10% 0.015 250 / 0.4);
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
