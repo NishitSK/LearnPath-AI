@@ -3,9 +3,8 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts';
 import { useAuth } from '@clerk/clerk-react';
+import { API_BASE } from '../config';
 import './Progress.css';
-
-const API_BASE = 'http://localhost:3000';
 
 /* ── Palette ── */
 const COLORS = {
@@ -31,7 +30,7 @@ const AvatarRing = ({ pct }) => {
       {/* Removed Background Circle */}
       
       {/* The Progress Ring (Behind the head) */}
-      <svg height={size} width={size} className="avatar-ring-svg">
+      <svg viewBox={`0 0 ${size} ${size}`} className="avatar-ring-svg">
         <circle
           stroke="rgba(255,255,255,0.05)"
           fill="transparent"

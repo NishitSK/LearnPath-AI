@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuth } from '@clerk/clerk-react';
+import { API_BASE } from '../config';
 import './Pages.css';
 import './AiAssistant.css';
-const API_BASE = 'http://localhost:3000';
 
 const AiAssistant = () => {
   const { isSignedIn, getToken, userId } = useAuth();
@@ -310,7 +310,7 @@ const AiAssistant = () => {
             className={`option-btn ${activeTab === 'chat' ? 'active' : ''}`}
             onClick={() => setActiveTab('chat')}
           >
-            AI Doubt Solver
+            AI Assistant
           </button>
           <button 
             className={`option-btn ${activeTab === 'analysis' ? 'active' : ''}`}
@@ -360,7 +360,7 @@ const AiAssistant = () => {
               <div className="chat-input-area-wrap">
                 <div className="chat-input-area">
                   <textarea
-                    placeholder="Enter your prompt to talk to the AI..."
+                    placeholder="Enter your prompt ..."
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -397,7 +397,7 @@ const AiAssistant = () => {
                   {loading ? 'AI SYNCHRONIZATION ACTIVE...' : 'AI ANALYTICS SECURE'}
                 </div>
                 <div className="evaluation-title-row">
-                  <h1 className="hero-title">Skill <span className="gradient-text">Evaluation Pulse</span></h1>
+                  <h1 className="hero-title">Skill <span className="gradient-text">Evaluation</span></h1>
                   <button 
                     className={`analyse-btn ${isManualRefresh ? 'loading-state' : ''}`} 
                     onClick={() => fetchAnalysis(true)} 
@@ -538,7 +538,7 @@ const AiAssistant = () => {
                     <div className="note-inputs">
                       <input
                         type="text"
-                        placeholder="Title (optional)..."
+                        placeholder="Your Note"
                         value={noteTitle}
                         onChange={(e) => setNoteTitle(e.target.value)}
                       />

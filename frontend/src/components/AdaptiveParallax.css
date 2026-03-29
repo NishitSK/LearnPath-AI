@@ -1,7 +1,11 @@
 .parallax-section {
   position: relative;
   min-height: 600px;
-  background: var(--dark-bg);
+  background: 
+    linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+    var(--dark-bg);
+  background-size: 50px 50px, 50px 50px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -228,7 +232,125 @@
 }
 
 @media (max-width: 900px) {
-  .solar-system-wrap {
-    display: none;
+  .parallax-section {
+    padding: 6rem 1rem 3rem;
+    min-height: 550px;
+  }
+
+  .solar-core {
+    width: 200px;
+    height: 200px;
+    padding: 1rem;
+  }
+
+  .solar-core h2 {
+    font-size: 1.15rem;
+  }
+
+  .solar-core p {
+    font-size: 0.7rem;
+    max-width: 150px;
+  }
+
+  .core-badge {
+    font-size: 0.6rem;
+  }
+
+  .orbit-line {
+    width: 330px;
+    height: 330px;
+  }
+
+  .planet-slot {
+    transform: rotate(calc(var(--index) * 90deg)) translateY(-165px);
+  }
+
+  .planet-card-premium {
+    padding: 0.6rem 0.8rem;
+    min-width: 90px;
+    border-radius: 14px;
+  }
+
+  .planet-icon {
+    font-size: 1rem;
+  }
+
+  .planet-text {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .parallax-section {
+    min-height: 480px;
+    padding: 4rem 0.5rem 2rem;
+  }
+
+  .solar-core {
+    width: 155px;
+    height: 155px;
+  }
+
+  .solar-core h2 {
+    font-size: 1rem;
+  }
+
+  .solar-core p {
+    font-size: 0.62rem;
+    max-width: 125px;
+    line-height: 1.25;
+  }
+
+  .orbit-line {
+    width: 250px;
+    height: 250px;
+  }
+
+  .planet-slot {
+    transform: rotate(calc(var(--index) * 90deg)) translateY(-125px);
+  }
+
+  .planet-card-premium {
+    padding: 0.45rem 0.5rem;
+    min-width: 65px;
+    gap: 0.2rem;
+    border-radius: 12px;
+  }
+
+  .planet-icon {
+    font-size: 0.85rem;
+  }
+
+  .planet-text {
+    font-size: 0.58rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .solar-core {
+    width: 135px;
+    height: 135px;
+  }
+
+  .solar-core h2 {
+    font-size: 0.9rem;
+  }
+
+  .solar-core p {
+    display: none; /* Hide description on ultra-small screens to save space */
+  }
+
+  .orbit-line {
+    width: 210px;
+    height: 210px;
+  }
+
+  .planet-slot {
+    transform: rotate(calc(var(--index) * 90deg)) translateY(-105px);
+  }
+
+  .planet-card-premium {
+    padding: 0.4rem;
+    min-width: 55px;
   }
 }

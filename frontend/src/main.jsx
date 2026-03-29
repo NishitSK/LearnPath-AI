@@ -40,7 +40,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {!KEY_IS_VALID ? (
       <MissingKeyError />
     ) : (
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY}
+        afterSignInUrl="/learning-plans?auth=login"
+        afterSignUpUrl="/learning-plans?auth=login"
+        afterSignOutUrl="/?auth=logout"
         appearance={{
           baseTheme: dark,
         }}>

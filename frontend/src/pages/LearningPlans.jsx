@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
+import { API_BASE } from '../config';
 import './Pages.css';
 import './LearningPlans.css';
-
-const API_BASE = 'http://localhost:3000';
 
 const TECH_STACKS = ['React', 'Vue', 'Angular', 'Node.js', 'Express', 'Python', 'Django', 'FastAPI', 'Java', 'Spring Boot', 'Go', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'TypeScript', 'GraphQL', 'REST APIs'];
 
@@ -123,7 +122,7 @@ export default function LearningPlans() {
 
   return (
     <div className="page-container">
-      <h1 className="page-title" style={{ textAlign: 'center', marginBottom: '3rem' }}>Personalized Learning Plans</h1>
+      <h1 className="page-title lp-page-title">Personalized Learning Plans</h1>
 
       {!generated ? (
         <div className="lp-form-wrapper">
@@ -226,8 +225,8 @@ export default function LearningPlans() {
           </div>
           <div className="lp-roadmap">
             {dynamicPlan().map((phase, i) => (
-              <div key={i} className="lp-phase">
-                <div className="lp-phase-line" style={{ background: phase.color }} />
+              <div key={i} className="lp-phase" style={{ '--phase-color': phase.color }}>
+                <div className="lp-phase-line" />
                 <div className="lp-phase-content">
                   <div className="lp-phase-week" style={{ color: phase.color }}>{phase.week}</div>
                   <h3 className="lp-phase-title">{phase.title}</h3>

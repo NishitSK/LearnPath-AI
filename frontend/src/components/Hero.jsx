@@ -22,7 +22,7 @@ const Hero = () => {
         
         <div className="hero-actions">
           <SignedOut>
-            <SignInButton mode="modal" fallbackRedirectUrl="/learning-plans" forceRedirectUrl="/learning-plans" signUpFallbackRedirectUrl="/learning-plans">
+            <SignInButton mode="modal" fallbackRedirectUrl="/learning-plans?auth=login" forceRedirectUrl="/learning-plans?auth=login" signUpFallbackRedirectUrl="/learning-plans?auth=login">
               <button className="btn-primary">Start Your Journey</button>
             </SignInButton>
           </SignedOut>

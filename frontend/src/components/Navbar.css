@@ -24,6 +24,14 @@
   transition: all 0.3s ease;
 }
 
+.navbar-menu-toggle {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
 body.theme-light .navbar {
   background: rgba(248, 249, 255, 0.65) !important;
   box-shadow:
@@ -176,19 +184,108 @@ body.theme-light .navbar-links {
 @media (max-width: 980px) {
   .navbar {
     margin: 1rem auto !important;
-    padding: 1rem 1.5rem !important;
-    flex-wrap: wrap;
-    border-radius: 20px !important;
+    padding: 0.85rem 1rem !important;
+    border-radius: 18px !important;
+    position: sticky;
+    top: 1rem;
   }
 
   .navbar-logo {
     flex: 1 0 auto;
   }
-  
+
   .navbar-links {
-    order: 3;
+    display: none;
+  }
+
+  .navbar-actions {
+    display: none;
+  }
+
+  .navbar-menu-toggle {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--ui-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ui-heading);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .navbar-menu-toggle span {
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .navbar-menu-toggle.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .navbar-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .mobile-menu {
     width: 100%;
-    padding: 0.4rem;
-    justify-content: flex-start;
+    margin-top: 0.9rem;
+    padding: 0.8rem;
+    border-radius: 14px;
+    border: 1px solid var(--ui-border);
+    background: rgba(8, 10, 20, 0.92);
+    backdrop-filter: blur(20px);
+    display: none;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .navbar.mobile-open {
+    flex-wrap: wrap;
+  }
+
+  .navbar.mobile-open .mobile-menu {
+    display: flex;
+  }
+
+  .mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobile-menu-links .nav-link {
+    width: 100%;
+    padding: 0.65rem 0.7rem;
+    border-radius: 10px;
+    color: var(--ui-text) !important;
+    background: transparent;
+  }
+
+  .mobile-menu-links .nav-link.active {
+    background: rgba(124, 58, 237, 0.16) !important;
+    color: #ffffff !important;
+  }
+
+  .mobile-menu-links .nav-dot {
+    display: none;
+  }
+
+  .mobile-menu-actions {
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--ui-border);
+    display: flex;
+    justify-content: flex-end;
   }
 }

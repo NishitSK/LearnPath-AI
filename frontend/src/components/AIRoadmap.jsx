@@ -112,6 +112,13 @@ const AIRoadmap = ({ steps = DEFAULT_STEPS }) => {
   const [lineLengths, setLineLengths] = useState({ l1: 1, l2: 1, l3: 1 });
   const [paths, setPaths] = useState({ l1: '', l2: '', l3: '' });
   const [viewBox, setViewBox] = useState('0 0 1000 620');
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const arePathsReady = useMemo(
     () => Boolean(paths.l1 && paths.l2 && paths.l3),
@@ -144,11 +151,29 @@ const AIRoadmap = ({ steps = DEFAULT_STEPS }) => {
 
   const connections = useMemo(
     () => [
-      { id: 'l1', from: slots.s1, to: slots.s2, fromAnchor: 'right', toAnchor: 'left' },
-      { id: 'l2', from: slots.s2, to: slots.s3, fromAnchor: 'bottom', toAnchor: 'top' },
-      { id: 'l3', from: slots.s3, to: slots.s4, fromAnchor: 'left', toAnchor: 'right' },
+      { 
+        id: 'l1', 
+        from: slots.s1, 
+        to: slots.s2, 
+        fromAnchor: isMobile ? 'bottom' : 'right', 
+        toAnchor: isMobile ? 'top' : 'left' 
+      },
+      { 
+        id: 'l2', 
+        from: slots.s2, 
+        to: slots.s3, 
+        fromAnchor: 'bottom', 
+        toAnchor: 'top' 
+      },
+      { 
+        id: 'l3', 
+        from: slots.s3, 
+        to: slots.s4, 
+        fromAnchor: isMobile ? 'bottom' : 'left', 
+        toAnchor: isMobile ? 'top' : 'right' 
+      },
     ].filter((line) => line.from && line.to),
-    [slots]
+    [slots, isMobile]
   );
 
   const actions = useMemo(

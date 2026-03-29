@@ -2,6 +2,71 @@
    HOME PAGE — EDITORIAL LANDING
    ══════════════════════════════════════════════ */
 
+.home-content-wrap {
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+}
+
+.home-hero-layout {
+  max-width: 1280px;
+  margin: 0 auto 8rem;
+  padding: 0 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+}
+
+.home-hero-copy {
+  flex: 1 1 45%;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  z-index: 10;
+}
+
+.home-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+  color: #fff;
+}
+
+.home-hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--lp-text);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0;
+}
+
+.home-hero-cta-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.home-hero-cards {
+  flex: 1 1 45%;
+  min-width: 320px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.home-card-swap-frame {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
 .landing-page {
   padding: 0;
   position: relative;
@@ -338,10 +403,95 @@
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
+  .home-content-wrap {
+    padding-top: 7.4rem;
+    padding-bottom: 2.4rem;
+  }
+
+  .home-hero-layout {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4.2rem;
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+
+  .home-hero-copy {
+    min-width: 0;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  .home-hero-title {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    line-height: 1.15;
+  }
+
+  .home-hero-subtitle {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .home-hero-cta-row {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .home-hero-cta-row .btn-primary,
+  .home-hero-cta-row .btn-secondary {
+    width: min(100%, 260px);
+  }
+
+  .home-hero-cards {
+    min-width: 0;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .home-card-swap-frame {
+    padding-top: 4rem;
+    padding-bottom: 3.5rem;
+  }
+
   .landing-hero { grid-template-columns: 1fr; min-height: auto; }
   .landing-copy { padding: 3rem 1.25rem 2.5rem; border-right: none; border-bottom: 1px solid var(--border); }
   .landing-copy h1 { max-width: 100%; }
   .landing-highlights { grid-template-columns: 1fr; }
   .highlight-card { border-right: none; border-bottom: 1px solid var(--border); }
   .stat-chip-top, .stat-chip-bottom { display: none; }
+}
+
+@media (max-width: 480px) {
+  .home-content-wrap {
+    padding-top: 7.8rem;
+  }
+
+  .home-hero-layout {
+    margin-bottom: 3.25rem;
+    padding: 0 0.85rem;
+  }
+
+  .home-hero-copy {
+    gap: 1rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.75rem, 9.5vw, 2.35rem);
+  }
+
+  .home-hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .home-hero-cta-row {
+    gap: 0.75rem;
+  }
+
+  .home-card-swap-frame {
+    padding-top: 6rem;
+    padding-bottom: 4.5rem;
+  }
 }

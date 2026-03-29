@@ -734,13 +734,39 @@
   left: 0.75rem;
   right: 0.75rem;
   bottom: 2.8rem;
-  height: clamp(280px, 52%, 390px);
-  max-height: calc(100% - 4rem);
+  height: clamp(260px, 60%, 420px);
+  max-height: calc(100% - 3.5rem);
   transform: translateY(110%);
   opacity: 0;
   pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 5;
+}
+
+@media (max-width: 600px) {
+  .code-output-dropup {
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: 2.6rem;
+    height: clamp(280px, 75%, 450px);
+  }
+
+  .console-header-tabs {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .console-tab {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .console-tab:first-child::after {
+    margin-left: 0.6rem;
+  }
+
+  .custom-term-output {
+    padding: 1rem 0.75rem;
+  }
 }
 
 @media (max-width: 1180px) {
@@ -982,6 +1008,25 @@
   display: block;
 }
 
+@media (max-width: 600px) {
+  .tc-detail-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tc-detail-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .tc-var-label {
+    font-size: 0.75rem;
+  }
+
+  .tc-val-text {
+    font-size: 0.85rem;
+  }
+}
+
 .tc-detail-val {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1033,3 +1078,162 @@
   border-radius: 10px;
 }
 
+/* ===== RESPONSIVE FIXES ===== */
+@media (max-width: 900px) {
+  .page-container {
+    padding: 8.5rem 1rem 2rem !important; /* Significant top spacing to clear sticky navbar */
+  }
+
+  .assess-header {
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem !important;
+  }
+
+  .assess-tab {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .quiz-card {
+    padding: 1.25rem;
+  }
+
+  .quiz-question {
+    font-size: 1rem;
+  }
+
+  .quiz-option {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .opt-letter {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .prob-title {
+    font-size: 1.35rem;
+  }
+
+  .prob-desc {
+    font-size: 0.95rem;
+  }
+
+  .prob-example {
+    padding: 1rem;
+  }
+
+  .code-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+    gap: 1.5rem;
+  }
+
+  .code-problem,
+  .code-right-pane {
+    height: 600px; /* Give them fixed height when stacked to keep editor usable */
+    min-height: 0;
+  }
+
+  .editor-topbar {
+    padding: 0.5rem 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .editor-btns {
+    width: 100%;
+    margin-top: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .editor-btns .btn-run.code-action-run,
+  .editor-btns .btn-submit.code-action-submit {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.85rem !important;
+    padding: 0.45rem 0.75rem !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .quiz-actions {
+    justify-content: center;
+  }
+
+  .quiz-actions button {
+    width: 100%;
+  }
+
+  .tc-status-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .tc-status-text {
+    font-size: 1.1rem;
+  }
+
+  .tc-cases-row {
+    gap: 0.65rem;
+    margin: 1rem 0;
+  }
+
+  .tc-case-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .tc-detail-val {
+    padding: 1rem;
+  }
+
+  .code-problem,
+  .code-right-pane {
+    height: 520px;
+  }
+
+  .assess-tab {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Make sure dropdowns wrap nicely */
+  .prob-picker-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .prob-select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .code-problem,
+  .code-right-pane {
+    height: 480px;
+  }
+
+  .editor-btns .btn-run.code-action-run,
+  .editor-btns .btn-submit.code-action-submit {
+    padding: 0.4rem 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .prob-title {
+    font-size: 1.15rem;
+  }
+
+  .page-container {
+    padding-top: 10rem !important; /* Maximum spacing for very small screens */
+  }
+}

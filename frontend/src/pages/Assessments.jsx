@@ -1,10 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
-import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
 import './Pages.css';
 import './Assessments.css';
+
+globalThis.MonacoEnvironment = {
+  ...(globalThis.MonacoEnvironment || {}),
+  getWorker(_, label) {
+    if (label === 'json') return new jsonWorker();
+    if (label === 'css' || label === 'scss' || label === 'less') return new cssWorker();
+    if (label === 'html' || label === 'handlebars' || label === 'razor') return new htmlWorker();
+    if (label === 'typescript' || label === 'javascript') return new tsWorker();
+    return new editorWorker();
+  },
+};
 
 loader.config({ monaco });
 
@@ -20,7 +37,6 @@ monaco.editor.defineTheme('learnpath-dark', {
   },
 });
 
-const API_BASE = 'http://localhost:3000';
 const QUIZ_DRAFT_KEY = 'assessments_quiz_draft_v1';
 const CODE_DRAFT_KEY = 'assessments_code_draft_v1';
 
@@ -592,7 +608,7 @@ export default function Assessments({ theme = 'dark' }) {
   return (
     <div className="page-container">
       <div className="assess-header">
-        <h1 className="page-title" style={{ margin: 0 }}>Skill Assessments</h1>
+        <h1 className="page-title">Skill Assessments</h1>
         <div className="assess-tabs">
           <button className={`assess-tab ${activeTab === 'quiz' ? 'active' : ''}`} onClick={() => setActiveTab('quiz')}>Quiz</button>
           <button className={`assess-tab ${activeTab === 'code' ? 'active' : ''}`} onClick={() => setActiveTab('code')}>Coding Challenge</button>
